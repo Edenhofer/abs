@@ -1,0 +1,12 @@
+# Ignore final packages if present anywhere in the tree
+*.tar.*
+
+# Ignore src and pkg directories
+src/
+pkg/
+
+# Temporary Ignore List
+playonlinux-git/
+minecraft/
+lets-encrypt-git/
+
