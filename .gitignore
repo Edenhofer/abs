@@ -1,9 +1,10 @@
-# Ignore final packages if present anywhere in the tree
+# Ignore final packages, download content etc.
 *.tar.*
+*.deb
+*.rpm
 
-# Ignore src and pkg directories
-src/
-pkg/
+# Ignore subdirectories, e.g. src, pkg and git-clone dirs
+*/*/
 
 # Temporary Ignore List
 playonlinux-git/
