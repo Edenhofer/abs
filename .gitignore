@@ -1,5 +1,5 @@
 # Ignore final packages, download content etc.
-*.tar.*
+*.tar*
 *.deb
 *.rpm
 
