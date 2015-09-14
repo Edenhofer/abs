@@ -1,0 +1,36 @@
+# Maintainer: Gordian Edenhofer <gordian.edenhofer[at]yahoo[dot]de>
+
+pkgname=spigot
+pkgver=1.8.8
+pkgrel=1
+pkgdesc="High performance Minecraft server implementation (with screen session handling and automated backups)"
+arch=('any')
+url="https://www.spigotmc.org/"
+license=("LGPL")
+depends=('java-runtime-headless' 'screen' 'sudo' 'bash')
+optdepends=('tar: needed in order to create world backups')
+makedepends=('java-environment' 'git')
+provides=('minecraft-server')
+install=${pkgname}.install
+source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
+        "spigot-backup.service"
+        "spigot-backup.timer"
+        "spigot.service"
+        "spigot.sh")
+md5sums=('SKIP'
+         'fd17202ba0bb7796439f0b2f6bc53be4'
+         '774cd44ed90f6be51d368533cf74d7c2'
+         'd9ca80f88da4145acf339458757cbd24'
+         '17fede1d02736e0ee87d0b667cdf1525')
+
+build() {
+	java -jar BuildTools.jar --rev $pkgver
+}
+
+package() {
+    install -Dm755 spigot.sh                "${pkgdir}/usr/bin/spigot"
+    install -Dm644 spigot-${pkgver}.jar     "${pkgdir}/srv/spigot/spigot.jar"
+    install -Dm644 spigot.service           "${pkgdir}/usr/lib/systemd/system/spigot.service"
+    install -Dm644 spigot-backup.service    "${pkgdir}/usr/lib/systemd/system/spigot-backup.service"
+    install -Dm644 spigot-backup.timer      "${pkgdir}/usr/lib/systemd/system/spigot-backup.timer"
+}

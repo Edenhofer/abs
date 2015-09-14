@@ -1,0 +1,11 @@
+[Unit]
+Description=Spigot
+After=local-fs.target network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/spigot start
+ExecStop=/usr/bin/spigot stop
+
+[Install]
+WantedBy=multi-user.target
