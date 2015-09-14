@@ -2,6 +2,7 @@
 *.tar*
 *.deb
 *.rpm
+*.jar
 
 # Ignore subdirectories, e.g. src, pkg and git-clone dirs
 */*/
