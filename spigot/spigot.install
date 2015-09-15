@@ -30,6 +30,7 @@ post_upgrade() {
 }
 
 pre_remove() {
+	echo -e "\e[34;1m==>\e[39;1m Stopping and disabling spigot daemon... \e[0m"
 	systemctl stop spigot.service
     systemctl disable spigot.service
 
@@ -37,8 +38,9 @@ pre_remove() {
 }
 
 post_remove() {
+	echo -e "\e[34;1m==>\e[39;1m Removing ${USER} system user and group... \e[0m"
 	if getent passwd ${USER} >/dev/null 2>&1; then
-		userdel ${USER}
+		userdel ${USER} 2>/dev/null
 	fi
 	if getent group ${USER} >/dev/null 2>&1; then
 		groupdel ${USER}
