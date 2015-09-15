@@ -18,7 +18,8 @@ _update() {
 
 	echo -e "\e[34;1m==>\e[39;1m NOTE: The world data is stored under ${SERVER_ROOT} and the server runs \e[0m"
     echo -e "\e[34;1m==>\e[39;1m as ${USER} user to increase security. \e[0m"
-    echo -e "\e[34;1m==>\e[39;1m NOTE: Use the spigot script under /usr/bin/spigot to start, stop or backup the server. \e[0m"
+    echo -e "\e[34;1m==>\e[39;1m NOTE: Use the spigot script under /usr/bin/spigot to start, stop or backup the server \e[0m"
+	echo -e "\e[34;1m==>\e[39;1m and the configuration file under /etc/conf.d/spigot to adjust it to your liking. \e[0m"
 }
 
 post_install() {
@@ -48,4 +49,5 @@ post_remove() {
 
 	# Notifying the user of kept dirs
     [ -d ${SERVER_ROOT} ] && chown root:root ${SERVER_ROOT} && echo -e "\e[34;1m==>\e[39;1m NOTE: Game saves in ${SERVER_ROOT} were kept on your system.\e[0m"
+    [ -d /etc/conf.d/spigot ] && echo -e "\e[34;1m==>\e[39;1m NOTE: Your configuration file /etc/conf.d/spigot was kept on your system.\e[0m"
 }

@@ -2,7 +2,7 @@
 
 pkgname=spigot
 pkgver=1.8.8
-pkgrel=1
+pkgrel=2
 pkgdesc="High performance Minecraft server implementation (with screen session handling and automated backups)"
 arch=('any')
 url="https://www.spigotmc.org/"
@@ -11,23 +11,27 @@ depends=('java-runtime-headless' 'screen' 'sudo' 'bash')
 optdepends=('tar: needed in order to create world backups')
 makedepends=('java-environment' 'git')
 provides=('minecraft-server')
+backup=("etc/conf.d/${pkgname}")
 install=${pkgname}.install
 source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
         "spigot-backup.service"
         "spigot-backup.timer"
         "spigot.service"
-        "spigot.sh")
+        "${pkgname}.conf"
+        "${pkgname}.sh")
 md5sums=('SKIP'
          'fd17202ba0bb7796439f0b2f6bc53be4'
          '774cd44ed90f6be51d368533cf74d7c2'
          'd9ca80f88da4145acf339458757cbd24'
-         '17fede1d02736e0ee87d0b667cdf1525')
+         '4ae10896c2dc0bf225245038051afbd0'
+         'f3bc8bda12bdf50c61c7c0e3e6610fce')
 
 build() {
-	java -jar BuildTools.jar --rev $pkgver
+	java -jar BuildTools.jar --rev ${pkgver}
 }
 
 package() {
+    install -Dm644 spigot.conf              "${pkgdir}/etc/conf.d/spigot"
     install -Dm755 spigot.sh                "${pkgdir}/usr/bin/spigot"
     install -Dm644 spigot-${pkgver}.jar     "${pkgdir}/srv/spigot/spigot.jar"
     install -Dm644 spigot.service           "${pkgdir}/usr/lib/systemd/system/spigot.service"

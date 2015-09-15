@@ -1,7 +1,7 @@
 pkgbase = spigot
 	pkgdesc = High performance Minecraft server implementation (with screen session handling and automated backups)
 	pkgver = 1.8.8
-	pkgrel = 1
+	pkgrel = 2
 	url = https://www.spigotmc.org/
 	install = spigot.install
 	arch = any
@@ -14,16 +14,19 @@ pkgbase = spigot
 	depends = bash
 	optdepends = tar: needed in order to create world backups
 	provides = minecraft-server
+	backup = etc/conf.d/spigot
 	source = https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
 	source = spigot-backup.service
 	source = spigot-backup.timer
 	source = spigot.service
+	source = spigot.conf
 	source = spigot.sh
 	md5sums = SKIP
 	md5sums = fd17202ba0bb7796439f0b2f6bc53be4
 	md5sums = 774cd44ed90f6be51d368533cf74d7c2
 	md5sums = d9ca80f88da4145acf339458757cbd24
-	md5sums = 17fede1d02736e0ee87d0b667cdf1525
+	md5sums = 4ae10896c2dc0bf225245038051afbd0
+	md5sums = f3bc8bda12bdf50c61c7c0e3e6610fce
 
 pkgname = spigot
 
