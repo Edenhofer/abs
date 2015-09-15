@@ -29,10 +29,14 @@ post_upgrade() {
     _update
 }
 
-post_remove() {
+pre_remove() {
 	systemctl stop spigot.service
-	systemctl disable spigot.service
+    systemctl disable spigot.service
 
+	/usr/bin/spigot stop > /dev/null
+}
+
+post_remove() {
 	if getent passwd ${USER} >/dev/null 2>&1; then
 		userdel ${USER}
 	fi
