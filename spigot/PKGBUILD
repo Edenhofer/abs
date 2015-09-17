@@ -2,15 +2,16 @@
 
 pkgname=spigot
 pkgver=1.8.8
-pkgrel=2
-pkgdesc="High performance Minecraft server implementation (with screen session handling and automated backups)"
+pkgrel=3
+pkgdesc="High performance Minecraft server implementation"
 arch=('any')
 url="https://www.spigotmc.org/"
-license=("LGPL")
-depends=('java-runtime-headless' 'screen' 'sudo' 'bash')
+license=('LGPL')
+depends=('java-runtime-headless' 'screen' 'sudo' 'fontconfig' 'bash')
 optdepends=('tar: needed in order to create world backups')
 makedepends=('java-environment' 'git')
-provides=('minecraft-server')
+provides=("minecraft-server" "bukkit" "craftbukkit=${pkgver%_*}")
+conflicts=("bukkit" "craftbukkit" "spigot-patcher")
 backup=("etc/conf.d/${pkgname}")
 install=${pkgname}.install
 source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
@@ -19,6 +20,7 @@ source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/art
         "spigot.service"
         "${pkgname}.conf"
         "${pkgname}.sh")
+noextract=("BuildTools.jar")
 md5sums=('SKIP'
          'fd17202ba0bb7796439f0b2f6bc53be4'
          '774cd44ed90f6be51d368533cf74d7c2'
@@ -27,7 +29,8 @@ md5sums=('SKIP'
          'f3bc8bda12bdf50c61c7c0e3e6610fce')
 
 build() {
-	java -jar BuildTools.jar --rev ${pkgver}
+    export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=1g"
+    java -jar BuildTools.jar --rev ${pkgver}
 }
 
 package() {

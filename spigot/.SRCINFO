@@ -1,7 +1,7 @@
 pkgbase = spigot
-	pkgdesc = High performance Minecraft server implementation (with screen session handling and automated backups)
+	pkgdesc = High performance Minecraft server implementation
 	pkgver = 1.8.8
-	pkgrel = 2
+	pkgrel = 3
 	url = https://www.spigotmc.org/
 	install = spigot.install
 	arch = any
@@ -11,9 +11,16 @@ pkgbase = spigot
 	depends = java-runtime-headless
 	depends = screen
 	depends = sudo
+	depends = fontconfig
 	depends = bash
 	optdepends = tar: needed in order to create world backups
 	provides = minecraft-server
+	provides = bukkit
+	provides = craftbukkit=1.8.8
+	conflicts = bukkit
+	conflicts = craftbukkit
+	conflicts = spigot-patcher
+	noextract = BuildTools.jar
 	backup = etc/conf.d/spigot
 	source = https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
 	source = spigot-backup.service
