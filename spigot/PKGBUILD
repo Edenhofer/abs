@@ -15,9 +15,9 @@ conflicts=("bukkit" "craftbukkit" "spigot-patcher")
 backup=("etc/conf.d/${pkgname}")
 install=${pkgname}.install
 source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
-        "spigot-backup.service"
-        "spigot-backup.timer"
-        "spigot.service"
+        "${pkgname}-backup.service"
+        "${pkgname}-backup.timer"
+        "${pkgname}.service"
         "${pkgname}.conf"
         "${pkgname}.sh")
 noextract=("BuildTools.jar")
