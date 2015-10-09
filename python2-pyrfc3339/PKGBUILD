@@ -1,6 +1,6 @@
 #  Maintainer: Gordian Edenhofer <gordian.edenhofer[at]yahoo[dot]de>
 
-pkgname=python2-pyRFC3339
+pkgname=python2-pyrfc3339
 _pkgname=pyRFC3339
 pkgver=0.2
 pkgrel=1
