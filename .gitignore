@@ -3,12 +3,21 @@
 *.deb
 *.rpm
 *.jar
+*.tgz
+*.zip
+
+# Signed sources
+*.asc
+*.sig
 
 # Ignore subdirectories, e.g. src, pkg and git-clone dirs
 */*/
+
+# Backup files
+*~
+*.bak
 
 # Temporary Ignore List
 playonlinux-git/
 minecraft/
 mathematica/
-
