@@ -21,9 +21,13 @@ unset GIT_DIR
 for path in $(git diff --name-only --cached); do
 	if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
 		echo -e "\033[0;32m *** Generating (and adding) .SRCINFO for ${path%/PKGBUILD} and checking PKGBUILD with namcap. ***\033[0m"
-		cd ${path%/PKGBUILD}
-		mksrcinfo
-		git add ./.SRCINFO
-		namcap PKGBUILD
+		(cd ${path%PKGBUILD} && mksrcinfo && namcap PKGBUILD)
+
+		# Add the .SRCINFO file if it is not tracked already
+		git ls-files ${path%PKGBUILD}.SRCINFO --error-unmatch &> /dev/null
+		[[ "$?" == "1" ]] && git add -v ${path%PKGBUILD}.SRCINFO
+		git add -v -u ${path%PKGBUILD}.SRCINFO
+
+		# In order to not abort the commit, the last programm shell exit with a return code of 0
 	fi
 done
