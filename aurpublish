@@ -1,75 +1,76 @@
 #!/bin/bash
 
-# Declare usage
-usage()
-{
+# Help function, declare usage
+usage() {
 	cat <<- _EOF_
 		Usage: ./aurpublish [OPTIONS] PACKAGE
-		Push a subtree to the AUR
+		Manage AUR packages as git subtree
 
 		OPTIONS
-		    -p, --pull      instead of publishing, pull changes from the AUR.
-		                      Can import packages into a new subtree.
-		    -s, --speedup   speedup future publishing by recording the subtree
-		                      history during a push. This creates a merge commit
-		                      and a second copy of all commits in the subtree.
-		                      For more details, see the "--rejoin" option in git
-		                      subtree.
-		    -h, --help      show this usage message
+		    -p, --pull                   Pull changes from the AUR or import a new package
+		    -g, --git "<git options>"    Pass additional options to git (in brackets)
+		    -h, --help                   Show this help message
 _EOF_
 }
 
 # Function to test if package is already committed in git
-is_package_in_git()
-{
-    git ls-tree -d --name-only HEAD | grep -E "^${1}$" > /dev/null 2>&1
+is_package_in_git() {
+	git ls-tree -d --name-only HEAD | grep -E "^${1}$" > /dev/null 2>&1
 }
 
 # Do the great option check
-if [[ $# -eq 0 ]]; then
-    echo "error: No arguments passed. aurpublish needs a package to upload."
-    exit 1
-fi
-while [[ "${1}" != "" ]]; do
-    case ${1} in
-        -h|--help)
-            usage
-            exit
-            ;;
-        -p|--pull)
-            pull_subtree=1
-            shift
-            package="${1}"
-            ;;
-        -s|--speedup)
-            speedup=1
-            ;;
-        *)
-            if is_package_in_git ${1%/}; then
-                package="${1%/}"
-            else
-                echo "${0}: unrecognized package '${1}'"
-                echo "Try '${0} --help' for more information."
-                exit 1
-            fi
-    esac
-    shift
+PARAMS=$(getopt -o hg: -l help,git: -n "aurpublish" -- "$@")
+[[ $? -ne 0 ]] && echo "error: No arguments passed." && usage && exit -2
+eval set -- "$PARAMS"
+while true; do
+	case "$1" in
+		-h|--help)
+		usage
+		exit
+		;;
+
+		-p|--pull)
+		PULL_SUBTREE=1
+		;;
+
+		-g|--git)
+		if [[ "$2" ]]; then
+			GIT_OPTS="$2"
+		else
+			echo "No additional arguments given for git." && usage && exit -2
+		fi
+		shift
+		;;
+
+		--)
+		shift
+		break
+		;;
+
+		*)
+		usage
+		exit 1
+		;;
+	esac
+	shift
 done
+PACKAGE_ARRAY=($*)
 
-# MAIN
-if [[ "${pull_subtree}" = "1" ]]; then
-    # test if prefix already exists
-    if is_package_in_git ${package}; then
-        git subtree pull -P "${package}" aur:${package}.git master -m "Merge subtree '${package}'"
-    else
-        git subtree add -P "${package}" aur:${package}.git master
-    fi
-    exit 0
+# Main loop
+[[ ${#PACKAGE_ARRAY[@]} == 0 ]] && help && exit -1
+if [[ "${PULL_SUBTREE}" = "1" ]]; then
+	for package in ${PACKAGE_ARRAY[@]}; do
+		# Test if prefix already exists
+		if is_package_in_git ${package}; then
+			# Pull package, one at a time
+			git subtree pull -P "${package}" aur:${package}.git master -m "Merge subtree '${package}'"
+		else
+			git subtree add -P "${package}" aur:${package}.git master
+		fi
+	done
+else
+	# Push package to AUR
+	for package in ${PACKAGE_ARRAY[@]}; do
+		git subtree push -P "${package}" aur:${package}.git master $GIT_OPTS
+	done
 fi
-
-if [[ "${speedup}" = "1" ]]; then
-    git subtree split -P "${package}" --rejoin
-fi
-
-# Push package to AUR
-git subtree push -P "${package}" aur:${package}.git master
