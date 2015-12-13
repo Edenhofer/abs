@@ -15,29 +15,29 @@ conflicts=("bukkit" "craftbukkit" "spigot-patcher")
 backup=("etc/conf.d/${pkgname}")
 install=${pkgname}.install
 source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
-        "${pkgname}-backup.service"
-        "${pkgname}-backup.timer"
-        "${pkgname}.service"
-        "${pkgname}.conf"
-        "${pkgname}.sh")
+	"${pkgname}-backup.service"
+	"${pkgname}-backup.timer"
+	"${pkgname}.service"
+	"${pkgname}.conf"
+	"${pkgname}.sh")
 noextract=("BuildTools.jar")
 md5sums=('SKIP'
-         'fd17202ba0bb7796439f0b2f6bc53be4'
-         '774cd44ed90f6be51d368533cf74d7c2'
-         'd9ca80f88da4145acf339458757cbd24'
-         '4ae10896c2dc0bf225245038051afbd0'
-         'f3bc8bda12bdf50c61c7c0e3e6610fce')
+	'fd17202ba0bb7796439f0b2f6bc53be4'
+	'774cd44ed90f6be51d368533cf74d7c2'
+	'd9ca80f88da4145acf339458757cbd24'
+	'4ae10896c2dc0bf225245038051afbd0'
+	'f3bc8bda12bdf50c61c7c0e3e6610fce')
 
 build() {
-    export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=1g"
-    java -jar BuildTools.jar --rev ${pkgver}
+	export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=1g"
+	java -jar BuildTools.jar --rev ${pkgver}
 }
 
 package() {
-    install -Dm644 spigot.conf              "${pkgdir}/etc/conf.d/spigot"
-    install -Dm755 spigot.sh                "${pkgdir}/usr/bin/spigot"
-    install -Dm644 spigot-${pkgver}.jar     "${pkgdir}/srv/spigot/spigot.jar"
-    install -Dm644 spigot.service           "${pkgdir}/usr/lib/systemd/system/spigot.service"
-    install -Dm644 spigot-backup.service    "${pkgdir}/usr/lib/systemd/system/spigot-backup.service"
-    install -Dm644 spigot-backup.timer      "${pkgdir}/usr/lib/systemd/system/spigot-backup.timer"
+	install -Dm644 spigot.conf              "${pkgdir}/etc/conf.d/spigot"
+	install -Dm755 spigot.sh                "${pkgdir}/usr/bin/spigot"
+	install -Dm644 spigot-${pkgver}.jar     "${pkgdir}/srv/spigot/spigot.jar"
+	install -Dm644 spigot.service           "${pkgdir}/usr/lib/systemd/system/spigot.service"
+	install -Dm644 spigot-backup.service    "${pkgdir}/usr/lib/systemd/system/spigot-backup.service"
+	install -Dm644 spigot-backup.timer      "${pkgdir}/usr/lib/systemd/system/spigot-backup.timer"
 }
