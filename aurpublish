@@ -2,7 +2,7 @@
 
 # Help function, declare usage
 usage() {
-	cat <<- _EOF_
+	cat <<- 'EOF'
 		Usage: ./aurpublish [OPTIONS] PACKAGE
 		Manage AUR packages as git subtree
 
@@ -10,7 +10,7 @@ usage() {
 		    -p, --pull                   Pull changes from the AUR or import a new package
 		    -g, --git "<git options>"    Pass additional options to git (in brackets)
 		    -h, --help                   Show this help message
-_EOF_
+	EOF
 }
 
 # Function to test if package is already committed in git
@@ -56,8 +56,12 @@ while true; do
 done
 PACKAGE_ARRAY=($*)
 
-# Main loop
+# Check if the pacakge_array has more than 0 arguments
 [[ ${#PACKAGE_ARRAY[@]} == 0 ]] && help && exit -1
+# Remove trailing slashes from each package (if they even have one)
+PACKAGE_ARRAY=("${PACKAGE_ARRAY[@]%/}")
+
+# Push or pull the desired packages in the pacakge_array
 if [[ "${PULL_SUBTREE}" = "1" ]]; then
 	for package in ${PACKAGE_ARRAY[@]}; do
 		# Test if prefix already exists
@@ -69,8 +73,8 @@ if [[ "${PULL_SUBTREE}" = "1" ]]; then
 		fi
 	done
 else
-	# Push package to AUR
 	for package in ${PACKAGE_ARRAY[@]}; do
+		# Push package to the AUR
 		git subtree push -P "${package}" aur:${package}.git master $GIT_OPTS
 	done
 fi
