@@ -19,7 +19,7 @@ is_package_in_git() {
 }
 
 # Do the great option check
-PARAMS=$(getopt -o hg: -l help,git: -n "aurpublish" -- "$@")
+PARAMS=$(getopt -o phg: -l help,pull,git: -n "aurpublish" -- "$@")
 [[ $? -ne 0 ]] && echo "error: No arguments passed." && usage && exit -2
 eval set -- "$PARAMS"
 while true; do
