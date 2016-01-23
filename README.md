@@ -1,30 +1,32 @@
 # PKGBUILDs for the [Arch User Repository](https://aur.archlinux.org)
-Includes control scripts for managing AUR packages. Requires @falconindy's [pkgbuild-introspection](https://www.archlinux.org/packages/community/any/pkgbuild-introspection) tools to auto-generate .SRCINFO
+Additionally this repo includes control scripts for managing AUR packages.
+It requires @falconindy's [pkgbuild-introspection](https://www.archlinux.org/packages/community/any/pkgbuild-introspection) tool to auto-generate the .SRCINFO file.
 
 ## The idea behind the structure of this repo
-Commit PKGBUILDs in named subdirectories. Export them to the AUR with the included `aurpublish` script, using the subtree push stratagem. This preserves an independent history for third-party hosting, pull requests... ;)
+Commit PKGBUILDs in named subdirectories. Export them to the AUR with the included `aurpublish` script, using git subtrees. This preserves an independent history for third-party hosting and pull requests without losing the ability to manage all packages in one repo.
 
 ## Commands
-* Push PACKAGE to the AUR: `./aurpublish PACKAGE`
-> -p, --pull&nbsp;&nbsp;&nbsp;&nbsp;instead of publishing, pull changes from the AUR. Can import packages into a new subtree.
->
-> -s, --speedup&nbsp;&nbsp;&nbsp;&nbsp;speedup future publishing by recording the subtree history during a push. This creates a merge commit and a second copy of all commits in the subtree. For more details, see the "--rejoin" option in git subtree.
->
-> -h, --help&nbsp;&nbsp;&nbsp;&nbsp;show this usage message
+* Push or pull packages to or from the AUR using `./aurpublish [OPTIONS] PACKAGE(s)`
+```
+-p, --pull <package(s)>      Pull changes or import a new package from the AUR
+-g, --git '<git options>'    Pass additional options to git (in brackets)
+-h, --help                   Show a help message
+```
 
-* Adding commit hooks
-> \#!/bin/sh<br>
-> shopt -s nullglob<br>
-> for hook in \*.hook; do<br>
-> &nbsp;&nbsp;&nbsp;&nbsp;ln -sf "$(pwd)/${hook}" ".git/hooks/${hook%.hook}"<br>
-> done
+* Adding commit hooks (through bash)
+```bash
+for hook in \*.hook; do
+    ln -sf "$(pwd)/${hook}" ".git/hooks/${hook%.hook}"
+done
+```
 
-* Adding ssh-config rules
-> Add these few lines to your ssh configuration file (~/.ssh/config) and fill in the appropriate path to your AUR key file.<br>
-> *Host aur aur.archlinux.org<br>*
-> *&nbsp;&nbsp;&nbsp;&nbsp;User aur<br>*
-> *&nbsp;&nbsp;&nbsp;&nbsp;Hostname aur.archlinux.org<br>*
-> *&nbsp;&nbsp;&nbsp;&nbsp;IdentityFile <PATH TO YOUR AUR KEY>*
+* Adding ssh-config rules (to ~/.ssh/config)
+```
+Host aur aur.archlinux.org
+    User aur
+    Hostname aur.archlinux.org
+    IdentityFile <PATH_TO_YOUR_AUR_KEY>
+```
 
 ## Hooks
 * pre-commit

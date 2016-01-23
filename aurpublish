@@ -67,9 +67,9 @@ if [[ "${PULL_SUBTREE}" = "1" ]]; then
 		# Test if prefix already exists
 		if is_package_in_git ${package}; then
 			# Pull package, one at a time
-			git subtree pull -P "${package}" aur:${package}.git master -m "Merge subtree '${package}'"
+			git subtree pull -P "${package}" aur:${package}.git master -m "Merge subtree '${package}'" $GIT_OPTS
 		else
-			git subtree add -P "${package}" aur:${package}.git master
+			git subtree add -P "${package}" aur:${package}.git master $GIT_OPTS
 		fi
 	done
 else
