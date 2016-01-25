@@ -2,7 +2,7 @@
 
 pkgname=spigot
 pkgver=1.8.8
-pkgrel=3
+pkgrel=4
 pkgdesc="High performance Minecraft server implementation"
 arch=('any')
 url="https://www.spigotmc.org/"
@@ -25,8 +25,8 @@ md5sums=('47f1ff7f1466c0328abfd93f40856961'
          'fd17202ba0bb7796439f0b2f6bc53be4'
          '774cd44ed90f6be51d368533cf74d7c2'
          'd9ca80f88da4145acf339458757cbd24'
-         'abdc0e0fd9528bd5ae4155f45f67c857'
-         '17c5f2c6784bc5f1cb237cfab63c9f9e')
+         '6b50969ea9bce39109bb7bca2cbbf24b'
+         '96e6d4d964eec15771a55f9c2de9ea02')
 
 build() {
 	export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=1g"
