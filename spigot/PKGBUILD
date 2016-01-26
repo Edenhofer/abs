@@ -26,7 +26,7 @@ md5sums=('47f1ff7f1466c0328abfd93f40856961'
          '774cd44ed90f6be51d368533cf74d7c2'
          'd9ca80f88da4145acf339458757cbd24'
          '6b50969ea9bce39109bb7bca2cbbf24b'
-         '96e6d4d964eec15771a55f9c2de9ea02')
+         'f60794fde2d5cb52091e01fbce27d6d2')
 
 build() {
 	export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=1g"
