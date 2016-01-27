@@ -15,18 +15,49 @@ git diff-index --check --cached $against -- 1>&2
 [[ $? != "0" ]] && echo -e "\033[0;31mThis commit contains whitespace issues!\033[0m"
 
 # Usefull hooks for the Arch User Repository or Arch Build System
+
 # Fix environment of githooks
 unset GIT_DIR
+
+# Allow to read user input below, assigns stdin to keyboard
+exec < /dev/tty
+
 # Iterate through folders with a PKGBUILD
 for path in $(git diff --name-only --cached); do
 	if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
-		echo -e "\033[0;32m *** Generating (and adding) .SRCINFO for ${path%/PKGBUILD} and checking PKGBUILD with namcap. ***\033[0m"
-		(cd ${path%PKGBUILD} && mksrcinfo && namcap PKGBUILD)
+		echo -e "\033[1;32m==>\e[39;1m Entering ${path%/PKGBUILD}...\e[0m"
+
+		# Ask whether updating the checksums is desired
+		updpkgsums_cmd="updpkgsums"
+		echo -en "\e[34;1m  ->\e[39;1m Do you want to update the checksums using '${updpkgsums_cmd}'? [Y/n] \e[0m"
+		read -n1 user_input
+		echo
+		if [[ ${user_input} =~ (Y|y) ]]; then
+			(cd ${path%PKGBUILD} && ${updpkgsums_cmd})
+		fi
+		unset user_input
+
+		# Ask whether a rebuild is desired
+		makepkg_cmd="makepkg -sfc"
+		echo -en "\e[34;1m  ->\e[39;1m Do you want to rebuild the package using '${makepkg_cmd}'? [Y/n] \e[0m"
+		read -n1 user_input
+		echo
+		if [[ ${user_input} =~ (Y|y) ]]; then
+			(cd ${path%PKGBUILD} && ${makepkg_cmd})
+		fi
+		unset user_input
+
+		echo -e "\e[34;1m  ->\e[39;1m Generating .SRCINFO...\e[0m"
+		[[ ! -x "/usr/bin/mksrcinfo" ]] && echo -e "\e[0;31m  ->\e[39;1m Unable to execute /usr/bin/mksrcinfo... aborting commit\e[0m" && exit 1
+		(cd ${path%PKGBUILD} && mksrcinfo)
+		echo -e "\e[34;1m  ->\e[39;1m Checking PKGBUILD with namcap...\033[0m"
+		[[ ! -x "/usr/bin/namcap" ]] && echo -e "\e[0;31m  ->\e[39;1m Unable to execute /usr/bin/namcap... aborting commit\e[0m" && exit 1
+		(cd ${path%PKGBUILD} && namcap PKGBUILD)
 
 		# Add the .SRCINFO file if it is not tracked already
 		git ls-files ${path%PKGBUILD}.SRCINFO --error-unmatch &> /dev/null
-		[[ "$?" == "1" ]] && git add -v ${path%PKGBUILD}.SRCINFO
-		git add -v -u ${path%PKGBUILD}.SRCINFO
+		[[ "$?" == "1" ]] && git add -v ${path%PKGBUILD}.SRCINFO && echo -e "\e[34;1m  ->\e[39;1m Adding .SRCINFO to git tree...\033[0m"
+		git add -v -u ${path%PKGBUILD}.SRCINFO 1> /dev/null
 
 		# In order to not abort the commit, the last programm shell exit with a return code of 0
 	fi
