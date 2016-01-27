@@ -8,21 +8,21 @@ echo -n "" > "${1}"
 
 # Check for new PKGBUILDS
 for path in $(git diff --name-only --cached --diff-filter=A); do
-    if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
-        source "${path}"
-        echo -e "Initial upload: ${pkgname} ${pkgver}-${pkgrel}\n" >> "${1}"
-    fi
+	if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
+		source "${path}"
+		echo -e "Initial upload: ${pkgname} ${pkgver}-${pkgrel}\n" >> "${1}"
+	fi
 done
 
 # Check for updated PKGBUILDS
 for path in $(git diff --name-only --cached --diff-filter=M); do
-    if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
+	if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
 		# Source the PKGBUILD in order to get the variables in there
 		source "${path}"
-        echo -e "Upgpkg: ${pkgver}-${pkgrel}\n" >> "${1}"
-        ## If the pkgrel is "1", assume a new release
-        #[[ "${pkgrel}" = "1" && $(type -t pkgver) != "function" ]] && echo -e "new release\n" >> "${1}"
-    fi
+		echo -e "Upgpkg: ${pkgver}-${pkgrel}\n" >> "${1}"
+		## If the pkgrel is "1", assume a new release
+		#[[ "${pkgrel}" = "1" && $(type -t pkgver) != "function" ]] && echo -e "new release\n" >> "${1}"
+	fi
 done
 
 echo "${old_commit_msg}" >> "${1}"
