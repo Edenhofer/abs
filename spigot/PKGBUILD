@@ -2,7 +2,7 @@
 
 pkgname=spigot
 pkgver=1.8.8
-pkgrel=4
+pkgrel=5
 pkgdesc="High performance Minecraft server implementation"
 arch=('any')
 url="https://www.spigotmc.org/"
@@ -21,11 +21,11 @@ source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/art
 	"${pkgname}.conf"
 	"${pkgname}.sh")
 noextract=("BuildTools.jar")
-md5sums=('47f1ff7f1466c0328abfd93f40856961'
+md5sums=('SKIP'
          'fd17202ba0bb7796439f0b2f6bc53be4'
-         '774cd44ed90f6be51d368533cf74d7c2'
+         '872d2e03799f1f8f0c75acdebce91894'
          'd9ca80f88da4145acf339458757cbd24'
-         '6b50969ea9bce39109bb7bca2cbbf24b'
+         'a52c9d0680f91a8b9aa9329d026ae2f2'
          'f60794fde2d5cb52091e01fbce27d6d2')
 
 build() {
