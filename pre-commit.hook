@@ -43,7 +43,23 @@ for path in $(git diff --name-only --cached); do
 		read -n1 user_input
 		echo
 		if [[ ${user_input} =~ (Y|y) ]]; then
-			(cd ${path%PKGBUILD} && ${makepkg_cmd})
+			project_root="$(pwd)"
+			cd ${path%PKGBUILD}
+
+			echo
+			${makepkg_cmd}
+			# Ask to abort the commit in case the build failes
+			if [[ $? != 0 ]]; then
+				echo -en "\n\e[34;1m  ->\e[39;1m A failure occured while building the package. Do you want to abort this commit? [Y/n] \e[0m"
+				read -n1 user_input_two
+				echo
+				if [[ ${user_input_two} =~ (Y|y) ]]; then
+					exit 2
+				fi
+			else
+				echo
+			fi
+			cd "${project_root}"
 		fi
 		unset user_input
 
