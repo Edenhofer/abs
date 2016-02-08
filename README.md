@@ -1,6 +1,5 @@
 # PKGBUILDs for the [Arch User Repository](https://aur.archlinux.org)
 Additionally this repo includes control scripts for managing AUR packages.
-It requires @falconindy's [pkgbuild-introspection](https://www.archlinux.org/packages/community/any/pkgbuild-introspection) tool to auto-generate the .SRCINFO file.
 
 ## The idea behind the structure of this repo
 Commit PKGBUILDs in named subdirectories. Export them to the AUR with the included `aurpublish` script, using git subtrees. This preserves an independent history for third-party hosting and pull requests without losing the ability to manage all packages in one repo.
