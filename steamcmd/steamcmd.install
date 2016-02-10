@@ -1,0 +1,37 @@
+_user="steamcmd"
+_user_home="/srv/steamcmd"
+
+post_install() {
+	getent group "${_user}" &>/dev/null
+	if [ $? -ne 0 ]; then
+		echo -e "\e[34;1m==>\e[39;1m Adding ${_user} system group... \e[0m"
+		groupadd -r ${_user} 1>/dev/null
+	fi
+
+	getent passwd "${_user}" &>/dev/null
+	if [ $? -ne 0 ]; then
+		echo -e "\e[34;1m==>\e[39;1m Adding ${_user} system user... \e[0m"
+		useradd -r -g ${_user} -d ${_user_home} ${_user} 1>/dev/null
+	fi
+
+	chown ${_user}:${_user} "${_user_home}"
+	chown -R ${_user}:${_user} "${_user_home}"/{linux32,package,public,steamcmd.sh,steam.sh}
+}
+
+post_upgrade() {
+	chown ${_user}:${_user} "${_user_home}"
+	chown -R ${_user}:${_user} "${_user_home}"/{linux32,package,public,steamcmd.sh,steam.sh}
+}
+
+post_remove() {
+	echo -e "\e[34;1m==>\e[39;1m Removing ${_user} system user and group... \e[0m"
+	if getent passwd ${_user} >/dev/null 2>&1; then
+		userdel ${_user} 2>/dev/null
+	fi
+	if getent group ${_user} >/dev/null 2>&1; then
+		groupdel ${_user}
+	fi
+
+	# Notifying the user of kept dirs
+	[[ -d "${_user_home}" ]] && chown -R root:root "${_user_home}" && echo -e "\e[34;1m==>\e[39;1m NOTE: Game saves in ${_user_home} were preserved.\e[0m"
+}
