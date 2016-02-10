@@ -1,0 +1,10 @@
+[Unit]
+Description=ArmA3 Server Backup
+After=local-fs.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/arma3d backup
+
+[Install]
+WantedBy=multi-user.target
