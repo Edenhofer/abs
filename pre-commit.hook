@@ -64,7 +64,7 @@ for path in $(git diff --name-only --cached); do
 		unset user_input
 
 		echo -e "\e[34;1m  ->\e[39;1m Generating .SRCINFO...\e[0m"
-		(cd ${path%PKGBUILD} && makepkg --printsrcinfo > .SRCINFO)
+		(cd ${path%PKGBUILD} && makepkg --printsrcinfo | head -n -1 > .SRCINFO)
 		echo -e "\e[34;1m  ->\e[39;1m Checking PKGBUILD with namcap...\033[0m"
 		[[ ! -x "/usr/bin/namcap" ]] && echo -e "\e[0;31m  ->\e[39;1m Unable to execute /usr/bin/namcap... aborting commit\e[0m" && exit 1
 		(cd ${path%PKGBUILD} && namcap PKGBUILD)
