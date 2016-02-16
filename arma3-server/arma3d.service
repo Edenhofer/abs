@@ -4,8 +4,10 @@ After=local-fs.target network.target
 
 [Service]
 Type=forking
+EnvironmentFile=/etc/conf.d/arma3d.conf
 ExecStart=/usr/bin/minecraftd start
 ExecStop=/usr/bin/minecraftd stop
+USER=$GAME_USER
 
 [Install]
 WantedBy=multi-user.target

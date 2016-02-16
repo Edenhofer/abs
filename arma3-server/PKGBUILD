@@ -14,7 +14,7 @@ _server_root="/srv/steamcmd/${_game,,}"
 # Prevent compression of the final package since it would take too long (sereausly!)
 PKGEXT='.pkg.tar'
 
-pkgname=${_game}-server
+pkgname=${_game,,}-server
 pkgver=latest
 pkgrel=1
 pkgdesc="Steam Command Line Tools"
@@ -31,10 +31,10 @@ source=("${_game,,}d.sh"
 	"${_game,,}d.service"
 	"${_game,,}d.conf"
 	"server.cfg")
-md5sums=('4f79ce27ec37be0d66132af777e386c7'
-         '396d650eb633818d93a23e0d8ecb33a0'
+md5sums=('dfa65a20189bf9470b0849826a9041c0'
+         '9b10d6c9c6cfc631ca6b69b184e3a303'
          '65881fe56dcf7dcd4a8b412994beaa46'
-         '5ed78e366146e47f8498347e93ad5423'
+         '2262cc63b8e3f0dde7cd50363d382541'
          '179d238b1ceaa580fdf524391a26d01f'
          '181bebe43a9319101cdcd4884a3b2751')
 

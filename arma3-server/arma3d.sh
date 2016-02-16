@@ -6,6 +6,9 @@ _server_root="/srv/steamcmd/${_game,,}"
 
 source /etc/conf.d/"${_game,,}d.conf" || echo "Could not source /etc/conf.d/${_game,,}d.conf"
 
+# The actual program name
+declare -r myname="${_game,,}d"
+
 # General rule for the variable-naming-schema:
 # Variables in capital letters may be passed through the command line others not.
 
@@ -21,9 +24,6 @@ SESSION_NAME="${SESSION_NAME:-${_game,,}}"
 
 # Specify system parameters for the game server
 SERVER_PARMS="${SERVER_PARMS:-""}"
-
-# The actual program name
-declare -r myname="${_game,,}d"
 
 # Check whether sudo is needed at all
 if [[ $(whoami) == ${GAME_USER} ]]; then
