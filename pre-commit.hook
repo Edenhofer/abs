@@ -34,6 +34,9 @@ for path in $(git diff --name-only --cached); do
 		echo
 		if [[ ${user_input} =~ (Y|y) ]]; then
 			(cd ${path%PKGBUILD} && ${updpkgsums_cmd})
+
+			# Update tracked PKGBUILD
+			git add -u ${path} 1> /dev/null
 		fi
 		unset user_input
 
@@ -48,7 +51,7 @@ for path in $(git diff --name-only --cached); do
 
 			echo
 			${makepkg_cmd}
-			# Ask to abort the commit in case the build failes
+			# Ask to abort the commit in case the build fails
 			if [[ $? != 0 ]]; then
 				echo -en "\n\e[34;1m  ->\e[39;1m A failure occured while building the package. Do you want to abort this commit? [Y/n] \e[0m"
 				read -n1 user_input_two
@@ -72,7 +75,7 @@ for path in $(git diff --name-only --cached); do
 		# Add the .SRCINFO file if it is not tracked already
 		git ls-files ${path%PKGBUILD}.SRCINFO --error-unmatch &> /dev/null
 		[[ "$?" == "1" ]] && git add -v ${path%PKGBUILD}.SRCINFO && echo -e "\e[34;1m  ->\e[39;1m Adding .SRCINFO to git tree...\033[0m"
-		git add -v -u ${path%PKGBUILD}.SRCINFO 1> /dev/null
+		git add -u ${path%PKGBUILD}.SRCINFO 1> /dev/null
 
 		# In order to not abort the commit, the last programm shell exit with a return code of 0
 	fi
