@@ -1,14 +1,15 @@
 # Maintainer: Gordian Edenhofer <gordian.edenhofer[at]yahoo[dot]de>
 
 pkgname=spigot
-pkgver=1.8.8
-pkgrel=7
+pkgver=1.9
+pkgrel=1
 pkgdesc="High performance Minecraft server implementation"
 arch=('any')
 url="https://www.spigotmc.org/"
 license=('LGPL')
 depends=('java-runtime-headless' 'screen' 'sudo' 'fontconfig' 'bash')
-optdepends=('tar: needed in order to create world backups')
+optdepends=("tar: needed in order to create world backups"
+	"netcat: required in order to suspend an idle server")
 makedepends=('java-environment' 'git')
 provides=("minecraft-server" "bukkit" "craftbukkit=${pkgver%_*}")
 conflicts=("bukkit" "craftbukkit" "spigot-patcher")
@@ -22,11 +23,14 @@ source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/art
 	"${pkgname}.sh")
 noextract=("BuildTools.jar")
 md5sums=('SKIP'
-         'fd17202ba0bb7796439f0b2f6bc53be4'
+         'd537d56a8c097f38d0e74093281fb921'
          '872d2e03799f1f8f0c75acdebce91894'
          'd9ca80f88da4145acf339458757cbd24'
-         'a52c9d0680f91a8b9aa9329d026ae2f2'
-         'b2021deec456241cd049646a314ceef3')
+         'b441ac1b17b229d391e1eba5ad3f7108'
+         '6db759b0d4a7b78f3139ebf87c300323')
+
+_game="spigot"
+_server_root="/srv/craftbukkit"
 
 build() {
 	export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=1g"
@@ -34,10 +38,17 @@ build() {
 }
 
 package() {
-	install -Dm644 spigot.conf              "${pkgdir}/etc/conf.d/spigot"
-	install -Dm755 spigot.sh                "${pkgdir}/usr/bin/spigot"
-	install -Dm644 spigot-${pkgver}.jar     "${pkgdir}/srv/spigot/spigot.jar"
-	install -Dm644 spigot.service           "${pkgdir}/usr/lib/systemd/system/spigot.service"
-	install -Dm644 spigot-backup.service    "${pkgdir}/usr/lib/systemd/system/spigot-backup.service"
-	install -Dm644 spigot-backup.timer      "${pkgdir}/usr/lib/systemd/system/spigot-backup.timer"
+	install -Dm644 spigot.conf              "${pkgdir}/etc/conf.d/${_game}"
+	install -Dm755 spigot.sh                "${pkgdir}/usr/bin/${_game}"
+	install -Dm644 spigot.service           "${pkgdir}/usr/lib/systemd/system/${_game}.service"
+	install -Dm644 spigot-backup.service    "${pkgdir}/usr/lib/systemd/system/${_game}-backup.service"
+	install -Dm644 spigot-backup.timer      "${pkgdir}/usr/lib/systemd/system/${_game}-backup.timer"
+	install -Dm644 spigot-${pkgver}.jar     "${pkgdir}${_server_root}/spigot.jar"
+
+	# Link the log files
+	mkdir -p "${pkgdir}/var/log/"
+	ln -s "${_server_root}/logs" "${pkgdir}/var/log/${_game}"
+
+	# Give the group write permissions and set user or group ID on execution
+	chmod g+ws "${pkgdir}${_server_root}"
 }
