@@ -24,6 +24,9 @@ post_upgrade() {
 }
 
 post_remove() {
+	# Notifying the user of kept dirs
+	[[ -d "${_user_home}" ]] && chown -R root:root "${_user_home}" && echo -e "\e[34;1m==>\e[39;1m NOTE: Game saves in ${_user_home} were preserved.\e[0m"
+
 	echo -e "\e[34;1m==>\e[39;1m Removing ${_user} system user and group... \e[0m"
 	if getent passwd ${_user} >/dev/null 2>&1; then
 		userdel ${_user} 2>/dev/null
@@ -31,7 +34,4 @@ post_remove() {
 	if getent group ${_user} >/dev/null 2>&1; then
 		groupdel ${_user}
 	fi
-
-	# Notifying the user of kept dirs
-	[[ -d "${_user_home}" ]] && chown -R root:root "${_user_home}" && echo -e "\e[34;1m==>\e[39;1m NOTE: Game saves in ${_user_home} were preserved.\e[0m"
 }
