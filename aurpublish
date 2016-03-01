@@ -67,14 +67,14 @@ if [[ "${PULL_SUBTREE}" = "1" ]]; then
 		# Test if prefix already exists
 		if is_package_in_git ${package}; then
 			# Pull package, one at a time
-			git subtree pull -P "${package}" aur:${package}.git master -m "Merge subtree '${package}'" $GIT_OPTS
+			git subtree pull -P "${package}" aur@aur.archlinux.org:${package}.git master -m "Merge subtree '${package}'" $GIT_OPTS
 		else
-			git subtree add -P "${package}" aur:${package}.git master $GIT_OPTS
+			git subtree add -P "${package}" aur@aur.archlinux.org:${package}.git master $GIT_OPTS
 		fi
 	done
 else
 	for package in ${PACKAGE_ARRAY[@]}; do
 		# Push package to the AUR
-		git subtree push -P "${package}" aur:${package}.git master $GIT_OPTS
+		git subtree push -P "${package}" aur@aur.archlinux.org:${package}.git master $GIT_OPTS
 	done
 fi

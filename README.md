@@ -11,6 +11,7 @@ Commit PKGBUILDs in named subdirectories. Export them to the AUR with the includ
 -g, --git '<git options>'    Pass additional options to git (in brackets)
 -h, --help                   Show a help message
 ```
+Git, which is invoked by aurpublish, needs to know with which ssh-key you would like to authenticate to the AUR server. Therefore you must either specify your key through the command line or alter you ssh-configuration accordingly - Refer to 'Adding ssh-config rules' for more details.
 
 * Adding commit hooks (through bash)
 ```bash
@@ -19,7 +20,7 @@ for hook in \*.hook; do
 done
 ```
 
-* Adding ssh-config rules (to ~/.ssh/config)
+* Suggested: Adding ssh-config rules (to ~/.ssh/config)
 ```
 Host aur aur.archlinux.org
     User aur
