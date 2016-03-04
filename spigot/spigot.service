@@ -6,6 +6,8 @@ After=local-fs.target network.target
 Type=forking
 ExecStart=/usr/bin/spigot start
 ExecStop=/usr/bin/spigot stop
+USER=craftbukkit
+GROUP=craftbukkit
 
 [Install]
 WantedBy=multi-user.target

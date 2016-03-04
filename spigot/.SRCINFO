@@ -1,7 +1,7 @@
 pkgbase = spigot
 	pkgdesc = High performance Minecraft server implementation
 	pkgver = 1.9
-	pkgrel = 1
+	pkgrel = 2
 	url = https://www.spigotmc.org/
 	install = spigot.install
 	arch = any

@@ -4,10 +4,9 @@ After=local-fs.target
 
 [Service]
 Type=forking
-EnvironmentFile=/etc/conf.d/spigot
 ExecStart=/usr/bin/spigot backup
-USER=$MC_USER
-GROUP=$MC_USER
+USER=craftbukkit
+GROUP=craftbukkit
 
 [Install]
 WantedBy=multi-user.target
