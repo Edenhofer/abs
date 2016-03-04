@@ -4,9 +4,8 @@ After=local-fs.target
 
 [Service]
 Type=forking
-EnvironmentFile=/etc/conf.d/arma3d.conf
 ExecStart=/usr/bin/arma3d backup
-USER=$GAME_USER
+User=arma
 
 [Install]
 WantedBy=multi-user.target
