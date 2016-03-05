@@ -5,8 +5,8 @@ After=local-fs.target
 [Service]
 Type=forking
 ExecStart=/usr/bin/spigot backup
-USER=craftbukkit
-GROUP=craftbukkit
+User=craftbukkit
+Group=craftbukkit
 
 [Install]
 WantedBy=multi-user.target
