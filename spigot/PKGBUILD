@@ -1,7 +1,7 @@
 # Maintainer: Gordian Edenhofer <gordian.edenhofer[at]yahoo[dot]de>
 
 pkgname=spigot
-pkgver=1.9
+pkgver=1.9.2
 pkgrel=1
 pkgdesc="High performance Minecraft server implementation"
 arch=('any')
@@ -14,7 +14,7 @@ makedepends=('java-environment' 'git')
 provides=("minecraft-server" "bukkit" "craftbukkit=${pkgver%_*}")
 conflicts=("bukkit" "craftbukkit" "spigot-patcher")
 backup=("etc/conf.d/${pkgname}")
-install=${pkgname}.install
+install="${pkgname}.install"
 source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar"
 	"${pkgname}-backup.service"
 	"${pkgname}-backup.timer"
@@ -26,8 +26,8 @@ md5sums=('SKIP'
          '7bb2dc610c5f55e133bd41ab608ec7a1'
          '872d2e03799f1f8f0c75acdebce91894'
          '1eb2d5f485cf9eff7a99c826ad56fcf4'
-         'b441ac1b17b229d391e1eba5ad3f7108'
-         '70d89bab9f0b2ce10364f971be245959')
+         'f04e0bcf8d771b0d1dc0206dc173d77a'
+         '3510e37bc79b411a6fdb3a377902e444')
 
 _game="spigot"
 _server_root="/srv/craftbukkit"
@@ -38,12 +38,13 @@ build() {
 }
 
 package() {
-	install -Dm644 spigot.conf              "${pkgdir}/etc/conf.d/${_game}"
-	install -Dm755 spigot.sh                "${pkgdir}/usr/bin/${_game}"
-	install -Dm644 spigot.service           "${pkgdir}/usr/lib/systemd/system/${_game}.service"
-	install -Dm644 spigot-backup.service    "${pkgdir}/usr/lib/systemd/system/${_game}-backup.service"
-	install -Dm644 spigot-backup.timer      "${pkgdir}/usr/lib/systemd/system/${_game}-backup.timer"
-	install -Dm644 spigot-${pkgver}.jar     "${pkgdir}${_server_root}/spigot.jar"
+	install -Dm644 ${_game}.conf              "${pkgdir}/etc/conf.d/${_game}"
+	install -Dm755 ${_game}.sh                "${pkgdir}/usr/bin/${_game}"
+	install -Dm644 ${_game}.service           "${pkgdir}/usr/lib/systemd/system/${_game}.service"
+	install -Dm644 ${_game}-backup.service    "${pkgdir}/usr/lib/systemd/system/${_game}-backup.service"
+	install -Dm644 ${_game}-backup.timer      "${pkgdir}/usr/lib/systemd/system/${_game}-backup.timer"
+	install -Dm644 ${_game}-${pkgver}.jar     "${pkgdir}${_server_root}/${_game}.${pkgver}.jar"
+	ln -s "${_game}.${pkgver}.jar" "${pkgdir}${_server_root}/${_game}.jar"
 
 	# Link the log files
 	mkdir -p "${pkgdir}/var/log/"
