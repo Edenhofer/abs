@@ -57,12 +57,19 @@ done
 PACKAGE_ARRAY=($*)
 
 # Check if the pacakge_array has more than 0 arguments
-[[ ${#PACKAGE_ARRAY[@]} == 0 ]] && help && exit -1
+[[ ${#PACKAGE_ARRAY[@]} == 0 ]] && usage && exit -1
 # Remove trailing slashes from each package (if they even have one)
 PACKAGE_ARRAY=("${PACKAGE_ARRAY[@]%/}")
+# Strip directory information
+PACKAGE_ARRAY=("$(basename -a ${PACKAGE_ARRAY[@]})")
+
+# Save current path to get back later
+previous_pwd="$(pwd)"
+cd "$(git rev-parse --show-toplevel)"
 
 # Push or pull the desired packages in the pacakge_array
 if [[ "${PULL_SUBTREE}" = "1" ]]; then
+	# Pull package into its own subtree
 	for package in ${PACKAGE_ARRAY[@]}; do
 		# Test if prefix already exists
 		if is_package_in_git ${package}; then
@@ -73,8 +80,11 @@ if [[ "${PULL_SUBTREE}" = "1" ]]; then
 		fi
 	done
 else
+	# Push package to the AUR
 	for package in ${PACKAGE_ARRAY[@]}; do
-		# Push package to the AUR
 		git subtree push -P "${package}" aur@aur.archlinux.org:${package}.git master $GIT_OPTS
 	done
 fi
+
+# Restore previous path
+cd "${previous_pwd}"
