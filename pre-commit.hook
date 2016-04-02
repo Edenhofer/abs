@@ -46,7 +46,7 @@ for path in $(git diff --name-only --cached); do
 		read -n1 user_input
 		echo
 		if [[ ${user_input} =~ (Y|y) ]]; then
-			project_root="$(pwd)"
+			previous_pwd="$(pwd)"
 			cd ${path%PKGBUILD}
 
 			echo
@@ -62,7 +62,8 @@ for path in $(git diff --name-only --cached); do
 			else
 				echo
 			fi
-			cd "${project_root}"
+
+			cd "${previous_pwd}"
 		fi
 		unset user_input
 
