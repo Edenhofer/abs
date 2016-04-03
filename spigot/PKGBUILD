@@ -27,7 +27,7 @@ md5sums=('SKIP'
          '872d2e03799f1f8f0c75acdebce91894'
          '1eb2d5f485cf9eff7a99c826ad56fcf4'
          'f04e0bcf8d771b0d1dc0206dc173d77a'
-         'a3d4b1807896f87deb2d3e5a0deb8776')
+         '6ee73f849e2caf6d8c89c73a80cc0c33')
 
 _game="spigot"
 _server_root="/srv/craftbukkit"
