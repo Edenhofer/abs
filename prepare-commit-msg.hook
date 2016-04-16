@@ -17,8 +17,9 @@ done
 # Check for updated PKGBUILDS
 for path in $(git diff --name-only --cached --diff-filter=M); do
 	if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
-		# Source the PKGBUILD in order to get the variables in there
-		source "${path}"
+		# Use the up-to-date .SRCINFO file to retrieve the variables
+		pkgver=$(grep "pkgver = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
+		pkgrel=$(grep "pkgrel = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
 		echo -e "Upgpkg: ${pkgver}-${pkgrel}\n" >> "${1}"
 		## If the pkgrel is "1", assume a new release
 		#[[ "${pkgrel}" = "1" && $(type -t pkgver) != "function" ]] && echo -e "new release\n" >> "${1}"
