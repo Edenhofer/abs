@@ -8,15 +8,16 @@ echo -n "" > "${1}"
 
 # Check for new PKGBUILDS
 for path in $(git diff --name-only --cached --diff-filter=A); do
-	if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
-		source "${path}"
-		echo -e "Initial upload: ${pkgname} ${pkgver}-${pkgrel}\n" >> "${1}"
+	if [[ "${path}" =~ .*/PKGBUILD$ && -f "${path}" ]]; then
+		pkgver=$(grep "pkgver = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
+		pkgrel=$(grep "pkgrel = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
+		echo -e "Initial upload: ${pkgver}-${pkgrel}\n" >> "${1}"
 	fi
 done
 
 # Check for updated PKGBUILDS
 for path in $(git diff --name-only --cached --diff-filter=M); do
-	if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
+	if [[ "${path}" =~ .*/PKGBUILD$ && -f "${path}" ]]; then
 		# Use the up-to-date .SRCINFO file to retrieve the variables
 		pkgver=$(grep "pkgver = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
 		pkgrel=$(grep "pkgrel = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')

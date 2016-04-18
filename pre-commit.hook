@@ -24,7 +24,7 @@ exec < /dev/tty
 
 # Iterate through folders with a PKGBUILD
 for path in $(git diff --name-only --cached); do
-	if [[ "${path}" =~ .*/PKGBUILD$ ]]; then
+	if [[ "${path}" =~ .*/PKGBUILD$ && -f "${path}" ]]; then
 		echo -e "\033[1;32m==>\e[39;1m Entering ${path%/PKGBUILD}...\e[0m"
 
 		# Ask whether updating the checksums is desired
@@ -77,7 +77,8 @@ for path in $(git diff --name-only --cached); do
 		git ls-files ${path%PKGBUILD}.SRCINFO --error-unmatch &> /dev/null
 		[[ "$?" == "1" ]] && git add -v ${path%PKGBUILD}.SRCINFO && echo -e "\e[34;1m  ->\e[39;1m Adding .SRCINFO to git tree...\033[0m"
 		git add -u ${path%PKGBUILD}.SRCINFO 1> /dev/null
-
-		# In order to not abort the commit, the last programm shell exit with a return code of 0
+	elif [[ "${path}" =~ .*/PKGBUILD$ ]]; then
+		echo -e "\033[1;32m==>\e[39;1m The PATH '${path}' isn't a valid file, skipping...\e[0m"
 	fi
 done
+# In order to not abort the commit, the last programm shell exit with a return code of 0
