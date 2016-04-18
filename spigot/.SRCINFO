@@ -15,8 +15,8 @@ pkgbase = spigot
 	depends = bash
 	optdepends = tar: needed in order to create world backups
 	optdepends = netcat: required in order to suspend an idle server
-	provides = minecraft-server
-	provides = bukkit
+	provides = minecraft-server=1.9.2
+	provides = bukkit=1.9.2
 	provides = craftbukkit=1.9.2
 	conflicts = bukkit
 	conflicts = craftbukkit

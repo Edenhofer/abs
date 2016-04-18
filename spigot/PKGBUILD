@@ -11,7 +11,7 @@ depends=('java-runtime-headless' 'screen' 'sudo' 'fontconfig' 'bash')
 optdepends=("tar: needed in order to create world backups"
 	"netcat: required in order to suspend an idle server")
 makedepends=('java-environment' 'git')
-provides=("minecraft-server" "bukkit" "craftbukkit=${pkgver%_*}")
+provides=("minecraft-server=${pkgver%_*}" "bukkit=${pkgver%_*}" "craftbukkit=${pkgver%_*}")
 conflicts=("bukkit" "craftbukkit" "spigot-patcher")
 backup=("etc/conf.d/${pkgname}")
 install="${pkgname}.install"
