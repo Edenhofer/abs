@@ -23,9 +23,9 @@ unset GIT_DIR
 exec < /dev/tty
 
 # Iterate through folders with a PKGBUILD
-for path in $(git diff --name-only --cached); do
-	if [[ "${path}" =~ .*/PKGBUILD$ && -f "${path}" ]]; then
-		echo -e "\033[1;32m==>\e[39;1m Entering ${path%/PKGBUILD}...\e[0m"
+for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); do
+	if [[ -f "${path}/PKGBUILD" ]]; then
+		echo -e "\033[1;32m==>\e[39;1m Entering ${path}...\e[0m"
 
 		# Ask whether updating the checksums is desired
 		updpkgsums_cmd="updpkgsums"
@@ -33,10 +33,10 @@ for path in $(git diff --name-only --cached); do
 		read -n1 user_input
 		echo
 		if [[ ${user_input} =~ (Y|y) ]]; then
-			(cd ${path%PKGBUILD} && ${updpkgsums_cmd})
+			(cd "${path}" && ${updpkgsums_cmd})
 
 			# Update tracked PKGBUILD
-			git add -u ${path} 1> /dev/null
+			git add -u "${path}/PKGBUILD" 1> /dev/null
 		fi
 		unset user_input
 
@@ -46,8 +46,7 @@ for path in $(git diff --name-only --cached); do
 		read -n1 user_input
 		echo
 		if [[ ${user_input} =~ (Y|y) ]]; then
-			previous_pwd="$(pwd)"
-			cd ${path%PKGBUILD}
+			cd "${path}"
 
 			echo
 			${makepkg_cmd}
@@ -63,22 +62,20 @@ for path in $(git diff --name-only --cached); do
 				echo
 			fi
 
-			cd "${previous_pwd}"
+			cd - 1>/dev/null
 		fi
 		unset user_input
 
 		echo -e "\e[34;1m  ->\e[39;1m Generating .SRCINFO...\e[0m"
-		(cd ${path%PKGBUILD} && makepkg --printsrcinfo | head -n -1 > .SRCINFO)
+		(cd "${path}" && makepkg --printsrcinfo | head -n -1 > .SRCINFO)
 		echo -e "\e[34;1m  ->\e[39;1m Checking PKGBUILD with namcap...\033[0m"
 		[[ ! -x "/usr/bin/namcap" ]] && echo -e "\e[0;31m  ->\e[39;1m Unable to execute /usr/bin/namcap... aborting commit\e[0m" && exit 1
-		(cd ${path%PKGBUILD} && namcap PKGBUILD)
+		(cd "${path}" && namcap PKGBUILD)
 
 		# Add the .SRCINFO file if it is not tracked already
-		git ls-files ${path%PKGBUILD}.SRCINFO --error-unmatch &> /dev/null
-		[[ "$?" == "1" ]] && git add -v ${path%PKGBUILD}.SRCINFO && echo -e "\e[34;1m  ->\e[39;1m Adding .SRCINFO to git tree...\033[0m"
-		git add -u ${path%PKGBUILD}.SRCINFO 1> /dev/null
-	elif [[ "${path}" =~ .*/PKGBUILD$ ]]; then
-		echo -e "\033[1;32m==>\e[39;1m The PATH '${path}' isn't a valid file, skipping...\e[0m"
+		git ls-files "${path}/.SRCINFO" --error-unmatch &> /dev/null
+		[[ "$?" == "1" ]] && git add "${path}/.SRCINFO" && echo -e "\e[34;1m  ->\e[39;1m Adding .SRCINFO to git tree...\033[0m"
+		git add -u "${path}/.SRCINFO" 1>/dev/null
 	fi
 done
 # In order to not abort the commit, the last programm shell exit with a return code of 0

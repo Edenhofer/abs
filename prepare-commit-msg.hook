@@ -7,23 +7,23 @@ old_commit_msg="$(cat ${1})"
 echo -n "" > "${1}"
 
 # Check for new PKGBUILDS
-for path in $(git diff --name-only --cached --diff-filter=A); do
-	if [[ "${path}" =~ .*/PKGBUILD$ && -f "${path}" ]]; then
+for path in $(dirname $(git diff --name-only --cached --diff-filter=A) 2>/dev/null | sort -u); do
+	if [[ -f "${path}/PKGBUILD" ]]; then
 		# Use the updated .SRCINFO file to retrieve the variables
-		pkgbase=$(grep "pkgbase = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
-		pkgver=$(grep "pkgver = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
-		pkgrel=$(grep "pkgrel = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
+		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')
+		pkgver=$(grep "pkgver = " "${path}/.SRCINFO" | sed 's/^.*= //')
+		pkgrel=$(grep "pkgrel = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		echo -e "addpkg: ${pkgbase} ${pkgver}-${pkgrel}\n" >> "${1}"
 	fi
 done
 
 # Check for updated PKGBUILDS
-for path in $(git diff --name-only --cached --diff-filter=M); do
-	if [[ "${path}" =~ .*/PKGBUILD$ && -f "${path}" ]]; then
+for path in $(dirname $(git diff --name-only --cached --diff-filter=M) 2>/dev/null | sort -u); do
+	if [[ -f "${path}/PKGBUILD" ]]; then
 		# Use the updated .SRCINFO file to retrieve the variables
-		pkgbase=$(grep "pkgbase = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
-		pkgver=$(grep "pkgver = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
-		pkgrel=$(grep "pkgrel = " "${path%PKGBUILD}/.SRCINFO" | sed 's/^.*= //')
+		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')
+		pkgver=$(grep "pkgver = " "${path}/.SRCINFO" | sed 's/^.*= //')
+		pkgrel=$(grep "pkgrel = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		echo -e "upgpkg: ${pkgbase} ${pkgver}-${pkgrel}\n" >> "${1}"
 		## If the pkgrel is "1", assume a new release
 		#[[ "${pkgrel}" = "1" && $(type -t pkgver) != "function" ]] && echo -e "new release\n" >> "${1}"
