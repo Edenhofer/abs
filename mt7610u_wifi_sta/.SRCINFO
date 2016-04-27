@@ -13,4 +13,3 @@ pkgbase = mt7610u_wifi_sta
 	md5sums = SKIP
 
 pkgname = mt7610u_wifi_sta
-
