@@ -1,6 +1,6 @@
 pkgbase = spigot
 	pkgdesc = High performance Minecraft server implementation
-	pkgver = 1.9.2
+	pkgver = 1.9.4
 	pkgrel = 1
 	url = https://www.spigotmc.org/
 	install = spigot.install
@@ -15,9 +15,9 @@ pkgbase = spigot
 	depends = bash
 	optdepends = tar: needed in order to create world backups
 	optdepends = netcat: required in order to suspend an idle server
-	provides = minecraft-server=1.9.2
-	provides = bukkit=1.9.2
-	provides = craftbukkit=1.9.2
+	provides = minecraft-server=1.9.4
+	provides = bukkit=1.9.4
+	provides = craftbukkit=1.9.4
 	conflicts = bukkit
 	conflicts = craftbukkit
 	conflicts = spigot-patcher
@@ -34,6 +34,6 @@ pkgbase = spigot
 	md5sums = 872d2e03799f1f8f0c75acdebce91894
 	md5sums = 1eb2d5f485cf9eff7a99c826ad56fcf4
 	md5sums = f04e0bcf8d771b0d1dc0206dc173d77a
-	md5sums = 6ee73f849e2caf6d8c89c73a80cc0c33
+	md5sums = 916b310223dc685d945932b1cbde1eee
 
 pkgname = spigot
