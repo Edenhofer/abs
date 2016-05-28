@@ -7,7 +7,7 @@ pkgdesc="High performance Minecraft server implementation"
 arch=('any')
 url="https://www.spigotmc.org/"
 license=('LGPL')
-depends=('java-runtime-headless' 'screen' 'sudo' 'fontconfig' 'bash')
+depends=('java-runtime-headless' 'screen' 'sudo' 'fontconfig' 'bash' 'awk' 'sed')
 optdepends=("tar: needed in order to create world backups"
 	"netcat: required in order to suspend an idle server")
 makedepends=('java-environment' 'git')
