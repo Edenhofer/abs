@@ -2,7 +2,7 @@
 
 pkgname=spigot
 pkgver=1.10
-pkgrel=1
+pkgrel=2
 pkgdesc="High performance Minecraft server implementation"
 arch=('any')
 url="https://www.spigotmc.org/"
@@ -33,7 +33,7 @@ _game="spigot"
 _server_root="/srv/craftbukkit"
 
 build() {
-	export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=1g"
+	export MAVEN_OPTS="-Xmx2g"
 	java -jar BuildTools.jar --rev ${pkgver}
 }
 
@@ -52,4 +52,8 @@ package() {
 
 	# Give the group write permissions and set user or group ID on execution
 	chmod g+ws "${pkgdir}${_server_root}"
+
+	# Make plugins folder ready for drag and drop
+	mkdir -p "${pkgdir}/${_server_root}/plugins"
+	chmod -R 777 "${pkgdir}/${_server_root}/plugins"
 }
