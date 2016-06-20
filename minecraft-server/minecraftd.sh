@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # The actual program name
-declare -r myname="minecraftd"
-declare -r game="minecraft"
+[[ ! -z "${NAME}" ]] && declare -r myname=$NAME || myname="minecraftd"
+[[ ! -z "${GAME}" ]] && declare -r game=$GAME || game="minecraftd"
 
 # General rule for the variable-naming-schema:
 # Variables in capital letters may be passed through the command line others not.
@@ -23,6 +23,7 @@ declare -r game="minecraft"
 [[ ! -z "${MAXHEAP}" ]] && declare -r MAXHEAP=${MAXHEAP} || MAXHEAP="1024M"
 [[ ! -z "${THREADS}" ]] && declare -r THREADS=${THREADS} || THREADS="1"
 [[ ! -z "${JAVA_PARMS}" ]] && declare -r JAVA_PARMS=${JAVA_PARMS} || JAVA_PARMS="-Xmx${MAXHEAP} -Xms${MINHEAP} -XX:ParallelGCThreads=${THREADS}"
+[[ ! -z "${EXECUTABLE_CMD}" ]] && declare -r EXECUTABLE_CMD=${EXECUTABLE_CMD} || EXECUTABLE_CMD="java ${JAVA_PARAMS} -jar '${SERVER_ROOT}/${MAIN_EXECUTABLE}' nogui"
 
 # System parameters for the control script
 [[ ! -z "${IDLE_SERVER}" ]]       && tmp_IDLE_SERVER=${IDLE_SERVER}   || IDLE_SERVER="false"
@@ -154,7 +155,7 @@ server_start() {
 		echo "A screen ${SESSION_NAME} session is already running. Please close it first."
 	else
 		echo -en "Starting server..."
-		${SUDO_CMD} screen -dmS "${SESSION_NAME}" /bin/bash -c "cd '${SERVER_ROOT}'; java ${JAVA_PARMS} -jar '${SERVER_ROOT}/${MAIN_EXECUTABLE}' nogui"
+		${SUDO_CMD} screen -dmS "${SESSION_NAME}" /bin/bash -c "cd '${SERVER_ROOT}'; ${EXECUTABLE_CMD}' nogui"
 		echo -e "\e[39;1m done\e[0m"
 	fi
 
