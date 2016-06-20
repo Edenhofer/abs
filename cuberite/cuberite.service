@@ -4,7 +4,10 @@ After=local-fs.target network.target
 
 [Service]
 Type=forking
-ExecStart=/srv/cuberite/Cuberite -d
+Environment=NAME=cuberite
+Environment=GAME=cuberite
+ExecStart=/usr/bin/minecraftd.sh start
+ExecStop=/usr/bin/minecraftd.sh stop
 User=cuberite
 Group=cuberite
 
