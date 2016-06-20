@@ -155,7 +155,7 @@ server_start() {
 		echo "A screen ${SESSION_NAME} session is already running. Please close it first."
 	else
 		echo -en "Starting server..."
-		${SUDO_CMD} screen -dmS "${SESSION_NAME}" /bin/bash -c "cd '${SERVER_ROOT}'; ${EXECUTABLE_CMD}' nogui"
+		${SUDO_CMD} screen -dmS "${SESSION_NAME}" /bin/bash -c "cd '${SERVER_ROOT}'; ${EXECUTABLE_CMD}"
 		echo -e "\e[39;1m done\e[0m"
 	fi
 
