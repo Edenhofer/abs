@@ -1,0 +1,15 @@
+[Unit]
+Description=Minecraft Server
+After=local-fs.target network.target
+
+[Service]
+Type=forking
+Environment=NAME=%I
+Environment=GAME=%I
+ExecStart=/usr/bin/minecraftd start
+ExecStop=/usr/bin/minecraftd stop
+User=%I
+Group=%I
+
+[Install]
+WantedBy=multi-user.target
