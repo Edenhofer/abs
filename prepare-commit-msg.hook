@@ -6,21 +6,17 @@
 old_commit_msg="$(cat ${1})"
 echo -n "" > "${1}"
 
-# Check for new PKGBUILDS
-for path in $(dirname $(git diff --name-only --cached --diff-filter=A) 2>/dev/null | sort -u); do
-	if [[ -f "${path}/PKGBUILD" ]]; then
-		# Use the updated .SRCINFO file to retrieve the variables
+# Check for new or updated PKGBUILDS
+# Use the up-to-date .SRCINFO file to retrieve the variables
+for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); do
+	if basename -a $(git diff --name-only --cached --diff-filter=A ${path}) 2>/dev/null | sort -u | grep -q "^PKGBUILD$" -; then
+		# The PKGBUILD is unknown to git, alter the commit message accordignly
 		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgver=$(grep "pkgver = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgrel=$(grep "pkgrel = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		echo -e "addpkg: ${pkgbase} ${pkgver}-${pkgrel}\n" >> "${1}"
-	fi
-done
-
-# Check for updated PKGBUILDS
-for path in $(dirname $(git diff --name-only --cached --diff-filter=M) 2>/dev/null | sort -u); do
-	if [[ -f "${path}/PKGBUILD" ]]; then
-		# Use the updated .SRCINFO file to retrieve the variables
+	elif basename -a $(git diff --name-only --cached --diff-filter=M ${path}) 2>/dev/null | sort -u | grep -q "^PKGBUILD$" -; then
+		# The PKGBUILD is known by git
 		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgver=$(grep "pkgver = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgrel=$(grep "pkgrel = " "${path}/.SRCINFO" | sed 's/^.*= //')
