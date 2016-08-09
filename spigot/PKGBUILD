@@ -22,7 +22,7 @@ source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/art
 	"${pkgname}.conf"
 	"${pkgname}.sh")
 noextract=("BuildTools.jar")
-md5sums=('98ba43d2f5eafb0d883c0dafc00e19e8'
+md5sums=('SKIP'
          '7bb2dc610c5f55e133bd41ab608ec7a1'
          '872d2e03799f1f8f0c75acdebce91894'
          '1eb2d5f485cf9eff7a99c826ad56fcf4'
