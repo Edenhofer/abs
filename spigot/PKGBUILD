@@ -22,12 +22,12 @@ source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/art
 	"${pkgname}.conf"
 	"${pkgname}.sh")
 noextract=("BuildTools.jar")
-md5sums=('SKIP'
+md5sums=('98ba43d2f5eafb0d883c0dafc00e19e8'
          '7bb2dc610c5f55e133bd41ab608ec7a1'
          '872d2e03799f1f8f0c75acdebce91894'
          '1eb2d5f485cf9eff7a99c826ad56fcf4'
          '0eb82c47eca2bee150179f0406c790f0'
-         'e6a5e4506dfcb737c25027f5d689a50e')
+         '4bc55886074122c8a52a5e9d9d399462')
 
 _game="spigot"
 _server_root="/srv/craftbukkit"
