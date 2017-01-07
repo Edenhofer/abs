@@ -31,11 +31,11 @@ pkgbase = spigot
 	source = spigot.service
 	source = spigot.conf
 	source = spigot.sh
-	md5sums = SKIP
+	md5sums = 98ba43d2f5eafb0d883c0dafc00e19e8
 	md5sums = 7bb2dc610c5f55e133bd41ab608ec7a1
 	md5sums = 872d2e03799f1f8f0c75acdebce91894
 	md5sums = 1eb2d5f485cf9eff7a99c826ad56fcf4
-	md5sums = 0eb82c47eca2bee150179f0406c790f0
-	md5sums = 4bc55886074122c8a52a5e9d9d399462
+	md5sums = b377759fa023d1119893dacff3b01cec
+	md5sums = 1970c8751469a2a18bed333ba5d72c60
 
 pkgname = spigot
