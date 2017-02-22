@@ -35,7 +35,7 @@ check_https() {
 
 # Do the great option check
 PARAMS=$(getopt -o pshg: -l help,pull,check-https,git: -n "aurpublish" -- "$@")
-[[ $? -ne 0 ]] && echo "error: No arguments passed." && usage && exit -2
+[[ $? -ne 0 ]] && >&2 echo "error: No arguments passed." && usage && exit -2
 eval set -- "$PARAMS"
 while true; do
 	case "$1" in
@@ -52,7 +52,7 @@ while true; do
 		if [[ "$2" ]]; then
 			GIT_OPTS="$2"
 		else
-			echo "No additional arguments given for git." && usage && exit -2
+			>&2 echo "No additional arguments given for git." && usage && exit -2
 		fi
 		shift
 		;;
