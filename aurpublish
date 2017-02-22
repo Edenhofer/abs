@@ -2,13 +2,14 @@
 
 # Help function, declare usage
 usage() {
-	cat <<- 'EOF'
-		Usage: ./aurpublish [OPTIONS] PACKAGE
+	cat <<-EOF
+		Usage: ./$(basename $0) [OPTIONS] PACKAGE
 		Manage AUR packages as git subtree
 
 		OPTIONS
 		    -p, --pull                   Pull changes from the AUR or import a new package
 		    -g, --git "<git options>"    Pass additional options to git (in brackets)
+		    -s, --check-https            Check http links which could be https
 		    -h, --help                   Show this help message
 	EOF
 }
@@ -18,8 +19,22 @@ is_package_in_git() {
 	git ls-tree -d --name-only HEAD | grep -E "^${1}$" > /dev/null 2>&1
 }
 
+# Check for links in all packages which are using http but could be using https
+check_https() {
+	for i in $((find . -type f -iname pkgbuild -exec pcregrep -iH "http[^s]" {} \;) | sed 's/.*http:\/\/\([^\/]*\).*/\1/g' | sort | uniq); do
+		echo -n "${i}: "
+		curl -s "https://${i}" >/dev/null
+		if [[ $? != 0 ]]; then
+			echo -e "\e[31mFALSE\e[39m"
+		else
+			echo -e "\e[32mTRUE\e[39m"
+			find . -type f -iname pkgbuild -exec pcregrep -H "http://${i}" {} \;
+		fi
+	done
+}
+
 # Do the great option check
-PARAMS=$(getopt -o phg: -l help,pull,git: -n "aurpublish" -- "$@")
+PARAMS=$(getopt -o pshg: -l help,pull,check-https,git: -n "aurpublish" -- "$@")
 [[ $? -ne 0 ]] && echo "error: No arguments passed." && usage && exit -2
 eval set -- "$PARAMS"
 while true; do
@@ -40,6 +55,11 @@ while true; do
 			echo "No additional arguments given for git." && usage && exit -2
 		fi
 		shift
+		;;
+
+		-s|--check-https)
+		check_https
+		exit 0
 		;;
 
 		--)
