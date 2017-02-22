@@ -16,14 +16,15 @@ function usage() {
 
 # Check for links in all packages which are using http but could be using https
 function check_https() {
-	for link in $((find . -type f -iname pkgbuild -exec pcregrep -iH "http[^s]" {} \;) | sed 's/.*http:\/\/\([^\/]*\).*/\1/g' | sort | uniq); do
+	[[ -n "$@" ]] && path=$@ || patch=(.)
+	for link in $((find ${path[@]} -type f -iname pkgbuild -exec pcregrep -iH "http[^s]" {} \;) | sed 's/.*http:\/\/\([^\/]*\).*/\1/g' | sort | uniq); do
 		echo -n "${link}: "
 		curl -s "https://${link}" >/dev/null
 		if [[ $? != 0 ]]; then
 			echo -e "\e[31mFALSE\e[39m"
 		else
 			echo -e "\e[32mTRUE\e[39m"
-			find . -type f -iname pkgbuild -exec pcregrep -H "http://${link}" {} \;
+			find ${path[@]} -type f -iname pkgbuild -exec pcregrep -H "http://${link}" {} \;
 		fi
 	done
 }
@@ -50,7 +51,7 @@ function pull_packages() {
 
 # Do the great option check
 PARAMS=$(getopt -o pshg: -l help,pull,check-https,git: -n "aurpublish" -- "$@")
-[[ $? -ne 0 ]] && >&2 echo "error: No arguments passed." && usage && exit -2
+[[ $? -ne 0 ]] && >&2 echo "error: No arguments passed." && usage && exit 2
 eval set -- "$PARAMS"
 while true; do
 	case "$1" in
@@ -60,21 +61,20 @@ while true; do
 		;;
 
 		-p|--pull)
-		PULL_SUBTREE=1
+		PULL_SUBTREE=true
 		;;
 
 		-g|--git)
 		if [[ "$2" ]]; then
 			GIT_OPTS="$2"
 		else
-			>&2 echo "No additional arguments given for git." && usage && exit -2
+			>&2 echo "No additional arguments given for git." && usage && exit 2
 		fi
 		shift
 		;;
 
 		-s|--check-https)
-		check_https
-		exit 0
+		CHECK_HTTPS=true
 		;;
 
 		--)
@@ -91,22 +91,28 @@ while true; do
 done
 PACKAGE_ARRAY=($*)
 
-# Check if the pacakge_array has more than 0 arguments
-[[ ${#PACKAGE_ARRAY[@]} == 0 ]] && usage && exit -1
 # Remove trailing slashes from each package (if they even have one)
-PACKAGE_ARRAY=("${PACKAGE_ARRAY[@]%/}")
+[[ -n "${PACKAGE_ARRAY[@]}" ]] && PACKAGE_ARRAY=("${PACKAGE_ARRAY[@]%/}")
 # Strip directory information
-PACKAGE_ARRAY=("$(basename -a ${PACKAGE_ARRAY[@]})")
+[[ -n "${PACKAGE_ARRAY[@]}" ]] && PACKAGE_ARRAY=("$(basename -a ${PACKAGE_ARRAY[@]})")
 
 # Save current path to get back later
 previous_pwd="$(pwd)"
 cd "$(git rev-parse --show-toplevel)"
 
-# Push or pull the desired packages in the package_array
-if [[ "${PULL_SUBTREE}" = "1" ]]; then
-	pull_packages ${PACKAGE_ARRAY[@]}
+# Invoke the appropiate function to run the specified options
+if [[ "${CHECK_HTTPS,,}" == "true" ]]; then
+	check_https ${PACKAGE_ARRAY[@]}
+elif [[ -n "${PACKAGE_ARRAY[@]}" ]]; then
+	# Running pull or push commands makes sense only if a packages was specified
+	if [[ "${PULL_SUBTREE,,}" == "true" ]]; then
+		pull_packages ${PACKAGE_ARRAY[@]}
+	else
+		push_packages ${PACKAGE_ARRAY[@]}
+	fi
 else
-	push_packages ${PACKAGE_ARRAY[@]}
+	usage
+	exit 2
 fi
 
 # Restore previous path
