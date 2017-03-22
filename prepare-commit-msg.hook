@@ -14,15 +14,15 @@ for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); d
 		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgver=$(grep "pkgver = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgrel=$(grep "pkgrel = " "${path}/.SRCINFO" | sed 's/^.*= //')
-		echo -e "addpkg: ${pkgbase} ${pkgver}-${pkgrel}\n" >> "${1}"
+		echo -e "addpkg: ${pkgbase} ${pkgver}-${pkgrel}" >> "${1}"
 	elif basename -a $(git diff --name-only --cached --diff-filter=M ${path}) 2>/dev/null | sort -u | grep -q "^PKGBUILD$" -; then
 		# The PKGBUILD is known by git
 		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgver=$(grep "pkgver = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgrel=$(grep "pkgrel = " "${path}/.SRCINFO" | sed 's/^.*= //')
-		echo -e "upgpkg: ${pkgbase} ${pkgver}-${pkgrel}\n" >> "${1}"
+		echo -e "upgpkg: ${pkgbase} ${pkgver}-${pkgrel}" >> "${1}"
 		## If the pkgrel is "1", assume a new release
-		#[[ "${pkgrel}" = "1" && $(type -t pkgver) != "function" ]] && echo -e "new release\n" >> "${1}"
+		#[[ "${pkgrel}" = "1" && $(type -t pkgver) != "function" ]] && echo -e "new release" >> "${1}"
 	fi
 done
 
