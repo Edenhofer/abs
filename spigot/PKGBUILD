@@ -2,7 +2,7 @@
 
 pkgname=spigot
 pkgver=1.10.2
-pkgrel=1
+pkgrel=2
 pkgdesc="High performance Minecraft server implementation"
 arch=('any')
 url="https://www.spigotmc.org/"
@@ -22,12 +22,12 @@ source=("https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/art
 	"${pkgname}.conf"
 	"${pkgname}.sh")
 noextract=("BuildTools.jar")
-md5sums=('98ba43d2f5eafb0d883c0dafc00e19e8'
-         '7bb2dc610c5f55e133bd41ab608ec7a1'
-         '872d2e03799f1f8f0c75acdebce91894'
-         '1eb2d5f485cf9eff7a99c826ad56fcf4'
-         'b377759fa023d1119893dacff3b01cec'
-         '1970c8751469a2a18bed333ba5d72c60')
+sha512sums=('SKIP'
+            '914d079718bcf4adbe60ec1414ae95220be9e0ba6da8135d13fc9f1f82c7a5f1fb1844764a9d827bb9583bee2f6c10111880d0bcba135ec61d63b53a3f2aab27'
+            '76c77e47c442b477216e968db2213612579b24add54cf0e0512f808498673500b4d24e59bce70b1e7479d724a9a897ceb154e937b88a476beb11c8776258b36c'
+            'bfebbb163fe81dbf086f1511c60953c5ef4149e69c80e6a01af35ea67279e2c652072c9342a71e5d1c178a5504fc9d0275c19f51aacb65b722654c5c42a9b1cb'
+            '33f456fd945bb2cfa6b390ce0ab02753cc6366e39abff80a4f2b7aa3aebe3cd31d148b785cbc2aa159dd8ad9fb03233a09f8693eb031b6b9db8dc03643d2397b'
+            '8092c57ed0ce5fbe1ae6a197792dadc4175bb2ca0889cb26fab998f216e18bcc45382908032779ed9764766c044250f755429fe28fef7d2c236677310b9109e3')
 
 _game="spigot"
 _server_root="/srv/craftbukkit"
