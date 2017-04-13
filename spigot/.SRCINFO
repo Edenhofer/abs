@@ -1,14 +1,14 @@
 pkgbase = spigot
 	pkgdesc = High performance Minecraft server implementation
-	pkgver = 1.10.2
+	pkgver = 1.11.2
 	pkgrel = 2
 	url = https://www.spigotmc.org/
 	install = spigot.install
 	arch = any
 	license = LGPL
-	makedepends = java-environment
+	makedepends = java-environment>=8
 	makedepends = git
-	depends = java-runtime-headless
+	depends = java-runtime-headless>=8
 	depends = screen
 	depends = sudo
 	depends = fontconfig
@@ -17,9 +17,9 @@ pkgbase = spigot
 	depends = sed
 	optdepends = tar: needed in order to create world backups
 	optdepends = netcat: required in order to suspend an idle server
-	provides = minecraft-server=1.10.2
-	provides = bukkit=1.10.2
-	provides = craftbukkit=1.10.2
+	provides = minecraft-server=1.11.2
+	provides = bukkit=1.11.2
+	provides = craftbukkit=1.11.2
 	conflicts = bukkit
 	conflicts = craftbukkit
 	conflicts = spigot-patcher
