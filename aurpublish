@@ -43,7 +43,7 @@ function pull_packages() {
 			# Pull package, one at a time
 			git subtree pull -P "${package}" aur@aur.archlinux.org:${package}.git master -m "Merge subtree '${package}'" $GIT_OPTS
 		else
-			git subtree add -P "${package}" aur@aur.archlinux.org:${package}.git master $GIT_OPTS
+			git subtree add --squash -P "${package}" aur@aur.archlinux.org:${package}.git master $GIT_OPTS
 		fi
 	done
 }
