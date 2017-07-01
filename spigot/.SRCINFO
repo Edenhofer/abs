@@ -1,6 +1,6 @@
 pkgbase = spigot
 	pkgdesc = High performance Minecraft server implementation
-	pkgver = 1.11.2
+	pkgver = 1.12
 	pkgrel = 2
 	url = https://www.spigotmc.org/
 	install = spigot.install
@@ -17,9 +17,9 @@ pkgbase = spigot
 	depends = sed
 	optdepends = tar: needed in order to create world backups
 	optdepends = netcat: required in order to suspend an idle server
-	provides = minecraft-server=1.11.2
-	provides = bukkit=1.11.2
-	provides = craftbukkit=1.11.2
+	provides = minecraft-server=1.12
+	provides = bukkit=1.12
+	provides = craftbukkit=1.12
 	conflicts = bukkit
 	conflicts = craftbukkit
 	conflicts = spigot-patcher
@@ -36,6 +36,6 @@ pkgbase = spigot
 	sha512sums = 76c77e47c442b477216e968db2213612579b24add54cf0e0512f808498673500b4d24e59bce70b1e7479d724a9a897ceb154e937b88a476beb11c8776258b36c
 	sha512sums = bfebbb163fe81dbf086f1511c60953c5ef4149e69c80e6a01af35ea67279e2c652072c9342a71e5d1c178a5504fc9d0275c19f51aacb65b722654c5c42a9b1cb
 	sha512sums = 33f456fd945bb2cfa6b390ce0ab02753cc6366e39abff80a4f2b7aa3aebe3cd31d148b785cbc2aa159dd8ad9fb03233a09f8693eb031b6b9db8dc03643d2397b
-	sha512sums = 8092c57ed0ce5fbe1ae6a197792dadc4175bb2ca0889cb26fab998f216e18bcc45382908032779ed9764766c044250f755429fe28fef7d2c236677310b9109e3
+	sha512sums = 67429e4d33356724d090dd88b674439105e7d9f8a5f2a05698a03b704e145111ab8ef4b91f2147b79a8be8f257cb742078cf4c8cfd64a84be101e7944f5fe303
 
 pkgname = spigot
