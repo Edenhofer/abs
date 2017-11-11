@@ -104,7 +104,7 @@ PACKAGE_ARRAY=($@)
 # Remove trailing slashes from each package (if they even have one)
 [[ -n "${PACKAGE_ARRAY[*]}" ]] && PACKAGE_ARRAY=("${PACKAGE_ARRAY[@]%/}")
 # Strip directory information
-[[ -n "${PACKAGE_ARRAY[*]}" ]] && PACKAGE_ARRAY=("$(basename -a "${PACKAGE_ARRAY[@]}")")
+[[ -n "${PACKAGE_ARRAY[*]}" ]] && PACKAGE_ARRAY=($(basename -a "${PACKAGE_ARRAY[@]}"))
 
 # Save current path to get back later
 previous_pwd="$(pwd)"
