@@ -1,7 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 #
 # The hook should exit with non-zero status after issuing
 # an appropriate message if it wants to stop the commit.
+
+# Strictly disallow uninitialized Variables
+set -u
+# Exit if a single command breaks and its failure is not handled accordingly
+set -e
 
 if git rev-parse --verify HEAD >/dev/null 2>&1; then
 	against=HEAD
@@ -11,8 +16,7 @@ else
 fi
 
 # If there are whitespace errors, print the offending file names and fail.
-git diff-index --check --cached $against -- 1>&2
-[[ $? != "0" ]] && echo -e "\033[0;31mThis commit contains whitespace issues!\033[0m"
+git diff-index --check --cached $against -- 1>&2 || echo -e "\033[0;31mThis commit contains whitespace issues!\033[0m"
 
 # Usefull hooks for the Arch User Repository or Arch Build System
 
@@ -23,14 +27,14 @@ unset GIT_DIR
 exec < /dev/tty
 
 # Iterate through folders with a PKGBUILD
-for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); do
+for path in $(dirname "$(git diff --name-only --cached)" 2>/dev/null | sort -u); do
 	if [[ -f "${path}/PKGBUILD" ]]; then
 		echo -e "\033[1;32m==>\e[39;1m Entering ${path}...\e[0m"
 
 		# Ask whether updating the checksums is desired
 		updpkgsums_cmd="updpkgsums"
 		echo -en "\e[34;1m  ->\e[39;1m Do you want to update the checksums using '${updpkgsums_cmd}'? [Y/n] \e[0m"
-		read -n1 user_input
+		read -rn1 user_input
 		echo
 		if [[ ${user_input} =~ (Y|y) ]]; then
 			(cd "${path}" && ${updpkgsums_cmd})
@@ -43,17 +47,17 @@ for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); d
 		# Ask whether a rebuild is desired
 		makepkg_cmd="makepkg -sfc"
 		echo -en "\e[34;1m  ->\e[39;1m Do you want to rebuild the package using '${makepkg_cmd}'? [Y/n] \e[0m"
-		read -n1 user_input
+		read -rn1 user_input
 		echo
 		if [[ ${user_input} =~ (Y|y) ]]; then
-			cd "${path}"
+			cd "${path}" || exit 1
 
 			echo
-			${makepkg_cmd}
-			# Ask to abort the commit in case the build fails
-			if [[ $? != 0 ]]; then
+
+			if ! ${makepkg_cmd}; then
+				# Ask to abort the commit in case the build fails
 				echo -en "\n\e[34;1m  ->\e[39;1m A failure occured while building the package. Do you want to abort this commit? [Y/n] \e[0m"
-				read -n1 user_input_two
+				read -rn1 user_input_two
 				echo
 				if [[ ${user_input_two} =~ (Y|y) ]]; then
 					exit 2
@@ -73,9 +77,11 @@ for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); d
 		(cd "${path}" && namcap PKGBUILD)
 
 		# Add the .SRCINFO file if it is not tracked already
-		git ls-files "${path}/.SRCINFO" --error-unmatch &> /dev/null
-		[[ "$?" == "1" ]] && git add "${path}/.SRCINFO" && echo -e "\e[34;1m  ->\e[39;1m Adding .SRCINFO to git tree...\033[0m"
+		if ! git ls-files "${path}/.SRCINFO" --error-unmatch &> /dev/null; then
+			git add "${path}/.SRCINFO"
+			echo -e "\e[34;1m  ->\e[39;1m Adding .SRCINFO to git tree...\033[0m"
+		fi
+
 		git add -u "${path}/.SRCINFO" 1>/dev/null
 	fi
 done
-# In order to not abort the commit, the last programm shell exit with a return code of 0
