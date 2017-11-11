@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Strictly disallow uninitialized Variables
+set -u
+# Exit if a single command breaks and its failure is not handled accordingly
+set -e
+
 # Help function, declare usage
 function usage() {
 	cat <<-EOF
@@ -17,37 +22,40 @@ function usage() {
 # Check for links in all packages which are using http but could be using https
 function check_https() {
 	[[ -n "$*" ]] && path=($@) || path=(.)
-	for link in $( (find ${path[@]} -type f -iname pkgbuild -exec pcregrep -iH "http[^s]" {} \;) | sed 's/.*http:\/\/\([^\/]*\).*/\1/g' | sort | uniq); do
+	for link in $( (find "${path[@]}" -type f -iname pkgbuild -exec grep -iE "http[^s]" {} \;) | sed 's/.*http:\/\/\([^\/]*\).*/\1/g' | sort | uniq); do
 		echo -n "${link}: "
 		if ! curl -s "https://${link}" >/dev/null; then
 			echo -e "\e[31mFALSE\e[39m"
 		else
 			echo -e "\e[32mTRUE\e[39m"
-			find ${path[@]} -type f -iname pkgbuild -exec pcregrep -H "http://${link}" {} \;
+			find "${path[@]}" -type f -iname pkgbuild -exec grep -H "http://${link}" {} \;
 		fi
 	done
 }
 
 # Push package to the AUR
 function push_packages() {
-	for package in $@; do
-		git subtree push -P "${package}" aur@aur.archlinux.org:${package}.git master $GIT_OPTS
+	for package in "$@"; do
+		git subtree push -P "${package}" aur@aur.archlinux.org:"${package}.git" master "${GIT_OPTS[@]}"
 	done
 }
 
 # Pull package into its own subtree
 function pull_packages() {
-	for package in $@; do
+	for package in "$@"; do
 		# Test if prefix already exists respectively whether a package is already committed in git
 		if (git ls-tree -d --name-only HEAD | grep -E "^${package}$" >/dev/null 2>&1); then
 			# Pull package, one at a time
-			git subtree pull -P "${package}" aur@aur.archlinux.org:${package}.git master -m "Merge subtree '${package}'" $GIT_OPTS
+			git subtree pull -P "${package}" aur@aur.archlinux.org:"${package}.git" master -m "Merge subtree '${package}'" "${GIT_OPTS[@]}"
 		else
-			git subtree add --squash -P "${package}" aur@aur.archlinux.org:${package}.git master $GIT_OPTS
+			git subtree add --squash -P "${package}" aur@aur.archlinux.org:"${package}.git" master "${GIT_OPTS[@]}"
 		fi
 	done
 }
 
+PULL_SUBTREE=""
+GIT_OPTS=()
+CHECK_HTTPS=""
 # Do the great option check
 if ! PARAMS=$(getopt -o pshg: -l help,pull,check-https,git: -n "aurpublish" -- "$@"); then
 	>&2 echo "error: No arguments passed."
@@ -68,7 +76,7 @@ while true; do
 
 		-g|--git)
 		if [[ "$2" ]]; then
-			GIT_OPTS="$2"
+			GIT_OPTS=("$2")
 		else
 			>&2 echo "No additional arguments given for git." && usage && exit 2
 		fi
@@ -104,13 +112,13 @@ cd "$(git rev-parse --show-toplevel)" || exit 1
 
 # Invoke the appropiate function to run the specified options
 if [[ "${CHECK_HTTPS,,}" == "true" ]]; then
-	check_https ${PACKAGE_ARRAY[@]}
+	check_https "${PACKAGE_ARRAY[@]}"
 elif [[ -n "${PACKAGE_ARRAY[*]}" ]]; then
 	# Running pull or push commands makes sense only if a packages was specified
 	if [[ "${PULL_SUBTREE,,}" == "true" ]]; then
-		pull_packages ${PACKAGE_ARRAY[@]}
+		pull_packages "${PACKAGE_ARRAY[@]}"
 	else
-		push_packages ${PACKAGE_ARRAY[@]}
+		push_packages "${PACKAGE_ARRAY[@]}"
 	fi
 else
 	usage
