@@ -13,7 +13,8 @@ echo -n "" > "${1}"
 
 # Check for new or updated PKGBUILDS
 # Use the up-to-date .SRCINFO file to retrieve the variables
-for path in $(dirname "$(git diff --name-only --cached)" 2>/dev/null | sort -u); do
+# shellcheck disable=SC2046
+for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); do
 	if basename -a "$(git diff --name-only --cached --diff-filter=A "${path}")" 2>/dev/null | sort -u | grep -q "^PKGBUILD$" -; then
 		# The PKGBUILD is unknown to git, alter the commit message accordignly
 		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')

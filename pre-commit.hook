@@ -27,7 +27,8 @@ unset GIT_DIR
 exec < /dev/tty
 
 # Iterate through folders with a PKGBUILD
-for path in $(dirname "$(git diff --name-only --cached)" 2>/dev/null | sort -u); do
+# shellcheck disable=SC2046
+for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); do
 	if [[ -f "${path}/PKGBUILD" ]]; then
 		echo -e "\033[1;32m==>\e[39;1m Entering ${path}...\e[0m"
 
