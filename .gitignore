@@ -19,6 +19,7 @@
 *.bak
 
 # Temporary Ignore List
+linux-apparmor/
 playonlinux-git/
 minecraft/
 mathematica/
