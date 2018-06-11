@@ -15,13 +15,13 @@ echo -n "" > "${1}"
 # Use the up-to-date .SRCINFO file to retrieve the variables
 # shellcheck disable=SC2046
 for path in $(dirname $(git diff --name-only --cached) 2>/dev/null | sort -u); do
-	if basename -a "$(git diff --name-only --cached --diff-filter=A "${path}")" 2>/dev/null | sort -u | grep -q "^PKGBUILD$" -; then
+	if basename -a $(git diff --name-only --cached --diff-filter=A "${path}") 2>/dev/null | sort -u | grep -q "^PKGBUILD$" -; then
 		# The PKGBUILD is unknown to git, alter the commit message accordignly
 		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgver=$(grep "pkgver = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgrel=$(grep "pkgrel = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		echo -e "addpkg: ${pkgbase} ${pkgver}-${pkgrel}" >> "${1}"
-	elif basename -a "$(git diff --name-only --cached --diff-filter=M "${path}")" 2>/dev/null | sort -u | grep -q "^PKGBUILD$" -; then
+	elif basename -a $(git diff --name-only --cached --diff-filter=M "${path}") 2>/dev/null | sort -u | grep -q "^PKGBUILD$" -; then
 		# The PKGBUILD is known by git
 		pkgbase=$(grep "pkgbase = " "${path}/.SRCINFO" | sed 's/^.*= //')
 		pkgver=$(grep "pkgver = " "${path}/.SRCINFO" | sed 's/^.*= //')
