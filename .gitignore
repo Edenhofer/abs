@@ -13,6 +13,8 @@
 
 # Ignore subdirectories, e.g. src, pkg and git-clone dirs
 */*/
+# Ignore markdown files in subdirectories as they are most likely downloaded dynamically
+*/*.md
 
 # Backup files
 *~
