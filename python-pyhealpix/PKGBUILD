@@ -1,6 +1,6 @@
 # Maintainer: Gordian Edenhofer <gordian.edenhofer@gmail.com>
 
-pkgname=python-pyHealpix
+pkgname=python-pyhealpix
 _pkgname='pyHealpix'
 _pkgver=0.0.0
 # Unfortunately, upstream does not tag releases; just use the latest commit for now as done in the instruction material
