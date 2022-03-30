@@ -1,0 +1,62 @@
+pkgbase = bcc-git
+	pkgdesc = BPF Compiler Collection - latest git code
+	pkgver = v0.10.0.r92.270d54ae
+	pkgrel = 2
+	url = https://github.com/iovisor/bcc
+	arch = x86_64
+	license = Apache
+	checkdepends = netperf
+	checkdepends = iperf
+	makedepends = cmake
+	makedepends = clang>=3.7.0
+	makedepends = llvm>=3.7.0
+	makedepends = flex
+	makedepends = bison
+	makedepends = python
+	makedepends = python2
+	source = bcc-git::git+https://github.com/iovisor/bcc
+	sha256sums = SKIP
+
+pkgname = bcc-git
+	pkgdesc = BPF Compiler Collection - C library and examples - latest git code
+	depends = linux-headers
+	optdepends = bcc-tools-git: Python utilites using the BCC library
+	optdepends = python-bcc-git: Python 3 bindings for BCC
+	optdepends = python2-bcc-git: Python 2 bindings for BCC
+	provides = bcc
+	provides = libbcc
+	conflicts = bcc
+	conflicts = libbcc
+
+pkgname = bcc-tools-git
+	pkgdesc = BPF Compiler Collection - Tools - latest git code
+	arch = any
+	depends = bcc-git
+	depends = libedit
+	depends = ethtool
+	optdepends = python-bcc-git: Python 3 bindings for BCC
+	optdepends = python2-bcc-git: Python 2 bindings for BCC
+	optdepends = luajit: Lua bindings for BCC
+	provides = bcc-tools
+	conflicts = bcc-tools
+
+pkgname = python-bcc-git
+	pkgdesc = BPF Compiler Collection - Python 3 bindings - latest git code
+	arch = any
+	depends = bcc-git
+	depends = python
+	optdepends = python-netaddr2: Network address representation and manipulation
+	optdepends = python-pyroute2: Netlink and Linux network configuration
+	provides = python-bcc
+	conflicts = python-bcc
+
+pkgname = python2-bcc-git
+	pkgdesc = BPF Compiler Collection - Python 2 bindings - latest git code
+	arch = any
+	depends = bcc-git
+	depends = python2
+	optdepends = python2-netaddr2: Network address representation and manipulation
+	optdepends = python2-pyroute2: Netlink and Linux network configuration
+	provides = python2-bcc
+	conflicts = python2-bcc
+
