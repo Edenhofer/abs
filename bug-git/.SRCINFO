@@ -1,0 +1,30 @@
+pkgbase = bup-git
+	pkgdesc = Efficient file backup system based on the git packfile format
+	pkgver = 0.33.r1.g75b4ad2f
+	pkgrel = 1
+	epoch = 1
+	url = https://bup.github.io/
+	arch = i686
+	arch = x86_64
+	arch = aarch64
+	license = GPL
+	checkdepends = rsync
+	checkdepends = python-pytest
+	makedepends = pandoc
+	depends = python-fuse
+	depends = par2cmdline
+	depends = python-pyxattr
+	depends = acl
+	depends = readline
+	depends = attr
+	depends = git
+	optdepends = python-tornado: launch a web server to examine backup sets
+	optdepends = readline: FTP access
+	optdepends = par2cmdline: error correction
+	optdepends = python-pytest-xdist: parallel tests
+	provides = bup=0.33.r1.g75b4ad2f
+	conflicts = bup
+	source = bup-git::git+https://github.com/bup/bup.git
+	sha512sums = SKIP
+
+pkgname = bup-git
