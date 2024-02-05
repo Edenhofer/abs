@@ -1,8 +1,0 @@
-post_install() {
-	echo "Start the elegance-colors daemon process prior to configuring a theme."
-	echo "Do so by running \"elegance-colors\" in a terminal."
-}
-
-post_upgrade() {
-	post_install
-}
