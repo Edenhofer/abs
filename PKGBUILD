@@ -49,7 +49,7 @@ package_zoom-libs-bin() {
   # libcef.so dependencies is missing according to namcap.
   )
   optdepends=(
-    'picom: extra compositor needed by some window managers for screen sharing'
+    'picom: needed by some window managers for screen sharing'
     'ibus: remote control'
   )
   bsdtar -xf "${srcdir}/${noextract[0]}" -T nativelibs.txt -C "$pkgdir"
@@ -58,11 +58,10 @@ package_zoom-libs-bin() {
 package_zoom-libs() {
   pkgdesc="Native runtimes for Zoom Workspace client"
   depends=(ocl-icd mpg123 libxtst sqlite
-  quazip-qt5 qt5-{base,graphicaleffects,quickcontrols,quickcontrols2,svg,declarative})
+  quazip-qt5 qt5-{base,x11extras,graphicaleffects,quickcontrols,quickcontrols2,svg,declarative})
   optdepends=(
     'qt5-webengine: SSO login'
     'qt5-wayland: Wayland support'
-    'qt5-x11extras: Xorg support'
     qt5-{3d,multimedia,imageformats,remoteobjects} ffmpeg
     vulkan-icd-loader
   )
