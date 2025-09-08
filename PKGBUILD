@@ -1,5 +1,11 @@
 # Maintainer: Gordian Edenhofer <gordian.edenhofer@gmail.com>
-
+# Maintainer: Christian Heusel <christian@heusel.eu>
+# --- about native libs ---
+# Maintainer oech3
+# Contributor: tiziodcaio
+# Contributor: netcrusher
+# Contributor: Caleb Maclennan
+# Contributor: mnabid
 pkgbase=zoom
 pkgname=(zoom zoom-libs-bin zoom-libs)
 pkgver=6.5.11
@@ -55,7 +61,7 @@ package_zoom-libs() {
   quazip-qt5 qt5-{base,graphicaleffects,quickcontrols,quickcontrols2,svg,declarative})
   optdepends=(
     'qt5-webengine: SSO login'
-    'qt5-wauland: Wayland support'
+    'qt5-wayland: Wayland support'
     'qt5-x11extras: Xorg support'
     qt5-{3d,multimedia,imageformats,remoteobjects} ffmpeg
     vulkan-icd-loader
