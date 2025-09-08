@@ -55,7 +55,9 @@ package_zoom-libs() {
   quazip-qt5 qt5-{base,graphicaleffects,quickcontrols,quickcontrols2,svg,declarative})
   optdepends=(
     'qt5-webengine: SSO login'
-    qt5-{wayland,3d,x11extras,multimedia,imageformats,remoteobjects} ffmpeg
+    'qt5-wauland: Wayland support'
+    'qt5-x11extras: Xorg support'
+    qt5-{3d,multimedia,imageformats,remoteobjects} ffmpeg
     vulkan-icd-loader
   )
   conflicts=(zoom-libs-bin) 
